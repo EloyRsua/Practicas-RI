@@ -10,11 +10,13 @@ import uo.ri.util.exception.BusinessException;
 import uo.ri.util.jdbc.Jdbc;
 
 public class DeleteMechanic {
-    private static final String TMECHANICS_DELETE = "DELETE FROM TMECHANICS " + "WHERE ID = ?";
 
-    private static final String TMECHANICHS_EXIST = "SELECT* FROM TMECHANICS WHERE ID=?";
-    private static final String TMECHANICHS_WO = "SELECT* FROM TMECHANICS WHERE ID=?";
-    private String idMechanic;
+    private static final String SQL_DELETE_MECHANIC = "DELETE FROM TMECHANICS WHERE ID = ?";
+    private static final String SQL_CHECK_MECHANIC_EXISTS = "SELECT * FROM TMECHANICS WHERE id=?";
+    private static final String SQL_CHECK_WORK_ORDERS = "SELECT * FROM TWORKORDERS WHERE mechanic_id=? AND (state='ASSIGNED' OR state='OPEN')";
+    private static final String SQL_CHECK_INTERVENTIONS = "SELECT * FROM TINTERVENTIONS WHERE mechanic_id=?";
+    private static final String SQL_CHECK_CONTRACTS_INFORCE = "SELECT * FROM TCONTRACTS WHERE mechanic_id=? AND state='IN_FORCE' or state='TERMINATED'";
+    private final String idMechanic;
 
     public DeleteMechanic(String mechanicId) {
 	ArgumentChecks.isNotBlank(mechanicId);
@@ -22,50 +24,85 @@ public class DeleteMechanic {
     }
 
     public void execute() throws BusinessException {
-	checkConditions();
-	executeQuery();
-    }
-
-    private void executeQuery() {
-	// Process
-	try (Connection c = Jdbc.createThreadConnection();) {
-	    try (PreparedStatement pst = c.prepareStatement(TMECHANICS_DELETE)) {
-		pst.setString(1, idMechanic);
-		pst.executeUpdate();
-	    }
-
+	try (Connection c = Jdbc.createThreadConnection()) {
+	    checkConditions(c);
+	    executeQuery(c);
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
     }
 
-    /**
-     * @throws BusinessException if: - the mechanic does not exist - the mechanic
-     *                           has workorders assigned - the mechanic has
-     *                           interventions done - the mechanic has contracts
-     */
-    private void checkConditions() throws BusinessException {
-	checkIfExists();
-
+    private void executeQuery(Connection c) throws SQLException {
+	try (PreparedStatement pst = c.prepareStatement(SQL_DELETE_MECHANIC)) {
+	    pst.setString(1, idMechanic);
+	    pst.executeUpdate();
+	}
     }
 
-    private void checkIfExists() throws BusinessException {
-	try (Connection c = Jdbc.createThreadConnection();) {
-	    try (PreparedStatement pst = c.prepareStatement(TMECHANICHS_EXIST)) {
-		pst.setString(1, idMechanic);
+    private void checkConditions(Connection c)
+	throws BusinessException, SQLException {
+	checkIfExists(c);
+	checkWorkOrders(c);
+	checkContractsInForce(c);
+	checkInterventions(c);
+    }
 
-		try (ResultSet rs = pst.executeQuery()) {
-		    if (rs.next()) {
-			throw new BusinessException();
-		    }
+    private void checkIfExists(Connection c)
+	throws BusinessException, SQLException {
+	try (PreparedStatement pst = c.prepareStatement(
+	    SQL_CHECK_MECHANIC_EXISTS)) {
+	    pst.setString(1, idMechanic);
+	    try (ResultSet rs = pst.executeQuery()) {
+		if (!rs.next()) {
+		    throw new BusinessException(
+			"No existe un mecánico con id " + idMechanic);
 		}
 	    }
-	} catch (SQLException e) {
-	    throw new RuntimeException(e);
 	}
     }
 
-    private void checkWorkOrders() {
+    private void checkWorkOrders(Connection c)
+	throws BusinessException, SQLException {
+	try (
+	    PreparedStatement pst = c.prepareStatement(SQL_CHECK_WORK_ORDERS)) {
+	    pst.setString(1, idMechanic);
+	    try (ResultSet rs = pst.executeQuery()) {
+		if (rs.next()) {
+		    throw new BusinessException(
+			"No se pueden borrar mecánicos con órdenes de trabajo activas, id: "
+			    + idMechanic);
+		}
+	    }
+	}
+    }
 
+    private void checkContractsInForce(Connection c)
+	throws BusinessException, SQLException {
+	try (PreparedStatement pst = c.prepareStatement(
+	    SQL_CHECK_CONTRACTS_INFORCE)) {
+	    pst.setString(1, idMechanic);
+	    try (ResultSet rs = pst.executeQuery()) {
+		if (rs.next()) {
+		    throw new BusinessException(
+			"No se pueden borrar mecánicos con contratos activos, id: "
+			    + idMechanic);
+		}
+	    }
+	}
+    }
+
+    private void checkInterventions(Connection c)
+	throws BusinessException, SQLException {
+	try (PreparedStatement pst = c.prepareStatement(
+	    SQL_CHECK_INTERVENTIONS)) {
+	    pst.setString(1, idMechanic);
+	    try (ResultSet rs = pst.executeQuery()) {
+		if (rs.next()) {
+		    throw new BusinessException(
+			"No se pueden borrar mecánicos con intervenciones, id: "
+			    + idMechanic);
+		}
+	    }
+	}
     }
 }

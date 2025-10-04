@@ -13,68 +13,68 @@ import uo.ri.util.exception.BusinessException;
 import uo.ri.util.jdbc.Jdbc;
 
 public class AddMechanic {
-    private MechanicDto dto;
 
-    private static final String TMECHANICS_ADD = "insert into TMechanics" + "(id, nif, name, surname, version, " + "createdAt, updatedAt, entityState) "
-	+ "values (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_ADD_MECHANIC = "INSERT INTO TMechanics (id, nif, name, surname, version, createdAt, updatedAt, entityState) "
+	+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-    private static final String TMECHANICS_CHECK = "select id from Tmechanics where nif=?";
+    private static final String SQL_CHECK_MECHANIC_EXISTS = "SELECT nif FROM TMECHANICS WHERE nif = ?";
+
+    private final MechanicDto dto;
 
     public AddMechanic(MechanicDto dto) {
 	ArgumentChecks.isNotNull(dto);
 	ArgumentChecks.isNotBlank(dto.nif);
 	ArgumentChecks.isNotBlank(dto.name);
 	ArgumentChecks.isNotBlank(dto.surname);
-	// No commrpobamos ID y version ya que son datos que generamos nosotros mismos
+
+	// ID y version generados internamente
 	dto.id = UUID.randomUUID()
 		     .toString();
 	dto.version = 1;
+
 	this.dto = dto;
     }
 
     public MechanicDto execute() throws BusinessException {
-	checkIfMechanicAlreadyExists();
-	return executeQuery();
+	try (Connection c = Jdbc.createThreadConnection()) {
+	    checkIfMechanicAlreadyExists(c);
+	    return executeQuery(c);
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
     }
 
-    private void checkIfMechanicAlreadyExists() throws BusinessException {
-	try (Connection c = Jdbc.createThreadConnection();) {
-	    try (PreparedStatement pst = c.prepareStatement(TMECHANICS_CHECK)) {
-		pst.setString(1, dto.nif);
+    private void checkIfMechanicAlreadyExists(Connection c)
+	throws SQLException, BusinessException {
+	try (PreparedStatement pst = c.prepareStatement(
+	    SQL_CHECK_MECHANIC_EXISTS)) {
+	    pst.setString(1, dto.nif);
 
-		try (ResultSet rs = pst.executeQuery()) {
-		    if (rs.next()) {
-			String id = rs.getString(1);
-			if (id.equals(dto.id)) {
-			    throw new BusinessException();
-			}
-		    }
+	    try (ResultSet rs = pst.executeQuery()) {
+		if (rs.next()) {
+		    throw new BusinessException(String.format(
+			"Ya existe un mecánico con el NIF %s", dto.nif));
 		}
 	    }
-	} catch (SQLException e) {
-	    throw new RuntimeException(e);
 	}
     }
 
-    private MechanicDto executeQuery() {
-	// Process
-	try (Connection c = Jdbc.createThreadConnection();) {
-	    try (PreparedStatement pst = c.prepareStatement(TMECHANICS_ADD)) {
-		pst.setString(1, dto.id);
-		pst.setString(2, dto.nif);
-		pst.setString(3, dto.name);
-		pst.setString(4, dto.surname);
-		pst.setLong(5, dto.version);
-		pst.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
-		pst.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
-		pst.setString(8, "ENABLED");
+    private MechanicDto executeQuery(Connection c) throws SQLException {
+	Timestamp now = new Timestamp(System.currentTimeMillis());
 
-		pst.executeUpdate();
+	try (PreparedStatement pst = c.prepareStatement(SQL_ADD_MECHANIC)) {
+	    pst.setString(1, dto.id);
+	    pst.setString(2, dto.nif);
+	    pst.setString(3, dto.name);
+	    pst.setString(4, dto.surname);
+	    pst.setLong(5, dto.version);
+	    pst.setTimestamp(6, now);
+	    pst.setTimestamp(7, now);
+	    pst.setString(8, "ENABLED");
 
-	    }
-	} catch (SQLException e) {
-	    throw new RuntimeException(e);
+	    pst.executeUpdate();
 	}
+
 	return dto;
     }
 }

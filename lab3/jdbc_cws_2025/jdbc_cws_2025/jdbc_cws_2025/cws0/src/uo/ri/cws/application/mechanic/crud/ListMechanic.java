@@ -4,40 +4,46 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 import uo.ri.cws.application.service.mechanic.MechanicCrudService.MechanicDto;
+import uo.ri.util.assertion.ArgumentChecks;
 import uo.ri.util.jdbc.Jdbc;
 
-public class ListAllMechanics {
+public class ListMechanic {
 
-    private static final String TMECHANICS_FINDALL = "SELECT ID, NAME, "
-	+ "SURNAME, NIF, VERSION FROM TMECHANICS";
+    private String nif;
 
-    private List<MechanicDto> listOfMechanics;
+    private static final String TMECHANICS_FINDBYNIF = "SELECT ID, NAME, SURNAME, nif, VERSION FROM TMECHANICS "
+	+ "WHERE NIF = ?";
 
-    public List<MechanicDto> execute() {
-	listOfMechanics = new ArrayList<MechanicDto>();
-	// Process
+    public ListMechanic(String nif) {
+	ArgumentChecks.isNotBlank(nif);
+
+	this.nif = nif;
+    }
+
+    public Optional<MechanicDto> execute() {
 	try (Connection c = Jdbc.createThreadConnection()) {
 	    try (PreparedStatement pst = c.prepareStatement(
-		TMECHANICS_FINDALL)) {
-		try (ResultSet rs = pst.executeQuery();) {
-		    while (rs.next()) {
+		TMECHANICS_FINDBYNIF)) {
+		pst.setString(1, nif);
+		try (ResultSet rs = pst.executeQuery()) {
+		    if (rs.next()) {
 			MechanicDto dto = new MechanicDto();
 			dto.id = rs.getString("ID");
 			dto.version = rs.getLong("VERSION");
 			dto.nif = rs.getString("NIF");
 			dto.name = rs.getString("NAME");
 			dto.surname = rs.getString("SURNAME");
-			listOfMechanics.add(dto);
+			return Optional.of(dto);
 		    }
 		}
 	    }
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
-	return listOfMechanics;
+	return Optional.empty();
     }
+
 }

@@ -34,9 +34,10 @@ public class MechanicCrudServiceImpl implements MechanicCrudService {
     }
 
     @Override
-    public Optional<MechanicDto> findByNif(String nif) throws BusinessException {
-	// TODO Auto-generated method stub
-	return Optional.empty();
+    public Optional<MechanicDto> findByNif(String nif)
+	throws BusinessException {
+	ListMechanic lm = new ListMechanic(nif);
+	return lm.execute();
     }
 
     @Override
