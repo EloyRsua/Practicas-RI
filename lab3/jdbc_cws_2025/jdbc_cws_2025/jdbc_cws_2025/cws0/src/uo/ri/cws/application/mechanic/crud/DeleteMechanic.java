@@ -10,8 +10,7 @@ import uo.ri.util.exception.BusinessException;
 import uo.ri.util.jdbc.Jdbc;
 
 public class DeleteMechanic {
-    private static final String TMECHANICS_DELETE = "DELETE FROM TMECHANICS "
-	+ "WHERE ID = ?";
+    private static final String TMECHANICS_DELETE = "DELETE FROM TMECHANICS " + "WHERE ID = ?";
 
     private static final String TMECHANICHS_EXIST = "SELECT* FROM TMECHANICS WHERE ID=?";
     private static final String TMECHANICHS_WO = "SELECT* FROM TMECHANICS WHERE ID=?";
@@ -30,8 +29,7 @@ public class DeleteMechanic {
     private void executeQuery() {
 	// Process
 	try (Connection c = Jdbc.createThreadConnection();) {
-	    try (
-		PreparedStatement pst = c.prepareStatement(TMECHANICS_DELETE)) {
+	    try (PreparedStatement pst = c.prepareStatement(TMECHANICS_DELETE)) {
 		pst.setString(1, idMechanic);
 		pst.executeUpdate();
 	    }
@@ -42,15 +40,18 @@ public class DeleteMechanic {
     }
 
     /**
-     * @throws BusinessException if: - the mechanic does not exist - the
-     *                           mechanic has workorders assigned - the mechanic
-     *                           has interventions done - the mechanic has
-     *                           contracts
+     * @throws BusinessException if: - the mechanic does not exist - the mechanic
+     *                           has workorders assigned - the mechanic has
+     *                           interventions done - the mechanic has contracts
      */
     private void checkConditions() throws BusinessException {
+	checkIfExists();
+
+    }
+
+    private void checkIfExists() throws BusinessException {
 	try (Connection c = Jdbc.createThreadConnection();) {
-	    try (
-		PreparedStatement pst = c.prepareStatement(TMECHANICHS_EXIST)) {
+	    try (PreparedStatement pst = c.prepareStatement(TMECHANICHS_EXIST)) {
 		pst.setString(1, idMechanic);
 
 		try (ResultSet rs = pst.executeQuery()) {
@@ -62,5 +63,9 @@ public class DeleteMechanic {
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
+    }
+
+    private void checkWorkOrders() {
+
     }
 }
