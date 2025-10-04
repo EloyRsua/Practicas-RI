@@ -23,14 +23,14 @@ public class MechanicCrudServiceImpl implements MechanicCrudService {
 
     @Override
     public void update(MechanicDto dto) throws BusinessException {
-	// TODO Auto-generated method stub
-
+	UpdateMechanic um = new UpdateMechanic(dto);
+	um.execute();
     }
 
     @Override
     public Optional<MechanicDto> findById(String id) throws BusinessException {
-	// TODO Auto-generated method stub
-	return Optional.empty();
+	FindByIdMechanic fbi = new FindByIdMechanic(id);
+	return fbi.execute();
     }
 
     @Override
