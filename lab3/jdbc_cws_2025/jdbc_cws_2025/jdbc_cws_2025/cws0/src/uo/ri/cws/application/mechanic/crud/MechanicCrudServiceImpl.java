@@ -3,10 +3,13 @@ package uo.ri.cws.application.mechanic.crud;
 import java.util.List;
 import java.util.Optional;
 
+import uo.ri.cws.application.persistence.util.command.CommandExecutor;
 import uo.ri.cws.application.service.mechanic.MechanicCrudService;
 import uo.ri.util.exception.BusinessException;
 
 public class MechanicCrudServiceImpl implements MechanicCrudService {
+
+    private CommandExecutor exectuor = new CommandExecutor();
 
     @Override
     public MechanicDto create(MechanicDto dto) throws BusinessException {
@@ -23,8 +26,7 @@ public class MechanicCrudServiceImpl implements MechanicCrudService {
 
     @Override
     public void update(MechanicDto dto) throws BusinessException {
-	UpdateMechanic um = new UpdateMechanic(dto);
-	um.execute();
+	exectuor.execute(new UpdateMechanic(dto));
     }
 
     @Override
@@ -34,8 +36,7 @@ public class MechanicCrudServiceImpl implements MechanicCrudService {
     }
 
     @Override
-    public Optional<MechanicDto> findByNif(String nif)
-	throws BusinessException {
+    public Optional<MechanicDto> findByNif(String nif) throws BusinessException {
 	ListMechanic lm = new ListMechanic(nif);
 	return lm.execute();
     }

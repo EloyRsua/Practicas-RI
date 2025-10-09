@@ -1,24 +1,20 @@
 package uo.ri.cws.application.mechanic.crud;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Optional;
 
 import uo.ri.conf.Factories;
-import uo.ri.cws.application.service.mechanic.MechanicCrudService;
+import uo.ri.cws.application.persistence.mechanic.MechanicGateway;
+import uo.ri.cws.application.persistence.mechanic.MechanicGateway.MechanicRecord;
+import uo.ri.cws.application.persistence.util.command.Command;
 import uo.ri.cws.application.service.mechanic.MechanicCrudService.MechanicDto;
 import uo.ri.util.assertion.ArgumentChecks;
+import uo.ri.util.exception.BusinessChecks;
 import uo.ri.util.exception.BusinessException;
-import uo.ri.util.jdbc.Jdbc;
 
-public class UpdateMechanic {
-
-    private static final String SQL_UPDATE_MECHANIC = "UPDATE TMechanics SET name = ?, surname = ?, version = version + 1, updatedat = ? "
-	+ "WHERE id = ? AND version = ?";
+public class UpdateMechanic implements Command<Void> {
 
     private MechanicDto dto;
+    private MechanicGateway mg = Factories.persistence.forMechanic();
 
     public UpdateMechanic(MechanicDto dto) {
 	ArgumentChecks.isNotNull(dto);
@@ -29,42 +25,16 @@ public class UpdateMechanic {
 	this.dto = dto;
     }
 
-    public void execute() throws BusinessException {
+    @Override
+    public Void execute() throws BusinessException {
 
-	// Usar FindByIdMechanic para buscar el mecánico
-
-	MechanicCrudService mcs = Factories.service.forMechanicCrudService();
-	Optional<MechanicDto> existing = mcs.findById(dto.id);
-
-	if (existing.isEmpty()) {
-	    throw new BusinessException(
-		"No existe ningún mecánico con el id: " + dto.id);
-	}
-
-	updateMechanic(dto.id, dto.name, dto.surname, dto.version);
-    }
-
-    private void updateMechanic(String id, String name, String surname,
-	long version) throws BusinessException {
-
-	try (Connection c = Jdbc.createThreadConnection()) {
-	    try (PreparedStatement pst = c.prepareStatement(
-		SQL_UPDATE_MECHANIC)) {
-		pst.setString(1, name);
-		pst.setString(2, surname);
-		pst.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-		pst.setString(4, id);
-		pst.setLong(5, version);
-
-		int updated = pst.executeUpdate();
-		if (updated == 0) {
-		    throw new BusinessException(
-			"Mechanic was updated by another transaction");
-		}
-	    }
-	} catch (SQLException e) {
-	    throw new RuntimeException(e);
-	}
+	Optional<MechanicRecord> om = mg.findById(dto.id);
+	BusinessChecks.exists(om, "The mechanic does not exist");
+	// Checkear la version en todos los updates !!!
+	BusinessChecks.hasVersion(dto.version, om.get().version);
+	MechanicRecord m = new MechanicRecord();
+	mg.update(m); // MAPEAR DE DTO A RECORD MechanicDtoAsembler un metodo toDto y otro toRecord
+	return null;
     }
 
 }

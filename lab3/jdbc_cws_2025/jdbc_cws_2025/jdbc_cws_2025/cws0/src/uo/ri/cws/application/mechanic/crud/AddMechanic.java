@@ -44,16 +44,13 @@ public class AddMechanic {
 	}
     }
 
-    private void checkIfMechanicAlreadyExists(Connection c)
-	throws SQLException, BusinessException {
-	try (PreparedStatement pst = c.prepareStatement(
-	    SQL_CHECK_MECHANIC_EXISTS)) {
+    private void checkIfMechanicAlreadyExists(Connection c) throws SQLException, BusinessException {
+	try (PreparedStatement pst = c.prepareStatement(SQL_CHECK_MECHANIC_EXISTS)) {
 	    pst.setString(1, dto.nif);
 
 	    try (ResultSet rs = pst.executeQuery()) {
 		if (rs.next()) {
-		    throw new BusinessException(String.format(
-			"Ya existe un mecánico con el NIF %s", dto.nif));
+		    throw new BusinessException(String.format("Ya existe un mecánico con el NIF %s", dto.nif));
 		}
 	    }
 	}
