@@ -1,21 +1,19 @@
 package uo.ri.cws.application.mechanic.crud;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Optional;
 
+import uo.ri.conf.Factories;
+import uo.ri.cws.application.persistence.mechanic.MechanicGateway;
+import uo.ri.cws.application.persistence.mechanic.MechanicGateway.MechanicRecord;
+import uo.ri.cws.application.persistence.util.command.Command;
 import uo.ri.cws.application.service.mechanic.MechanicCrudService.MechanicDto;
 import uo.ri.util.assertion.ArgumentChecks;
-import uo.ri.util.jdbc.Jdbc;
+import uo.ri.util.exception.BusinessException;
 
-public class ListMechanic {
+public class ListMechanic implements Command<Optional<MechanicDto>> {
 
     private String nif;
-
-    private static final String TMECHANICS_FINDBYNIF = "SELECT ID, NAME, SURNAME, nif, VERSION FROM TMECHANICS "
-	+ "WHERE NIF = ?";
+    private MechanicGateway mg = Factories.persistence.forMechanic();
 
     public ListMechanic(String nif) {
 	ArgumentChecks.isNotBlank(nif);
@@ -23,27 +21,16 @@ public class ListMechanic {
 	this.nif = nif;
     }
 
-    public Optional<MechanicDto> execute() {
-	try (Connection c = Jdbc.createThreadConnection()) {
-	    try (PreparedStatement pst = c.prepareStatement(
-		TMECHANICS_FINDBYNIF)) {
-		pst.setString(1, nif);
-		try (ResultSet rs = pst.executeQuery()) {
-		    if (rs.next()) {
-			MechanicDto dto = new MechanicDto();
-			dto.id = rs.getString("ID");
-			dto.version = rs.getLong("VERSION");
-			dto.nif = rs.getString("NIF");
-			dto.name = rs.getString("NAME");
-			dto.surname = rs.getString("SURNAME");
-			return Optional.of(dto);
-		    }
-		}
-	    }
-	} catch (SQLException e) {
-	    throw new RuntimeException(e);
+    @Override
+    public Optional<MechanicDto> execute() throws BusinessException {
+	Optional<MechanicRecord> om = mg.findByNif(nif);
+	MechanicDto dto = MechanicDtoAssembler.toDto(om.get());
+	if (dto.equals(null)) {
+	    return Optional.empty();
+	} else {
+	    Optional<MechanicDto> odto = Optional.of(dto);
+	    return odto;
 	}
-	return Optional.empty();
     }
 
 }

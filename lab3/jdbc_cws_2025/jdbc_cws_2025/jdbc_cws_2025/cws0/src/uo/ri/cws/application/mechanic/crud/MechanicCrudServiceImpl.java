@@ -9,12 +9,11 @@ import uo.ri.util.exception.BusinessException;
 
 public class MechanicCrudServiceImpl implements MechanicCrudService {
 
-    private CommandExecutor exectuor = new CommandExecutor();
+    private CommandExecutor executuor = new CommandExecutor();
 
     @Override
     public MechanicDto create(MechanicDto dto) throws BusinessException {
-	AddMechanic am = new AddMechanic(dto);
-	return am.execute();
+	return executuor.execute(new AddMechanic(dto));
     }
 
     @Override
@@ -26,7 +25,7 @@ public class MechanicCrudServiceImpl implements MechanicCrudService {
 
     @Override
     public void update(MechanicDto dto) throws BusinessException {
-	exectuor.execute(new UpdateMechanic(dto));
+	executuor.execute(new UpdateMechanic(dto));
     }
 
     @Override

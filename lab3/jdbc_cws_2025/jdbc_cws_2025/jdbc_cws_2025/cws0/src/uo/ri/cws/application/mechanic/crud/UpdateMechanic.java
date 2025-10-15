@@ -32,8 +32,8 @@ public class UpdateMechanic implements Command<Void> {
 	BusinessChecks.exists(om, "The mechanic does not exist");
 	// Checkear la version en todos los updates !!!
 	BusinessChecks.hasVersion(dto.version, om.get().version);
-	MechanicRecord m = new MechanicRecord();
-	mg.update(m); // MAPEAR DE DTO A RECORD MechanicDtoAsembler un metodo toDto y otro toRecord
+	MechanicRecord m = MechanicDtoAssembler.toRecord(dto);
+	mg.update(m);
 	return null;
     }
 

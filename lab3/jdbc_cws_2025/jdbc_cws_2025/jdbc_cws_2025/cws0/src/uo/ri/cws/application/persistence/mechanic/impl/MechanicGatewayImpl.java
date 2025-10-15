@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,13 +17,39 @@ import uo.ri.util.jdbc.Queries;
 public class MechanicGatewayImpl implements MechanicGateway {
     @Override
     public void add(MechanicRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    Timestamp now = new Timestamp(System.currentTimeMillis());
+
+	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TMECHANICS_ADD"))) {
+		pst.setString(1, t.id);
+		pst.setString(2, t.nif);
+		pst.setString(3, t.name);
+		pst.setString(4, t.surname);
+		pst.setLong(5, t.version);
+		pst.setTimestamp(6, now);
+		pst.setTimestamp(7, now);
+		pst.setString(8, "ENABLED");
+
+		pst.executeUpdate();
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
 
     }
 
     @Override
     public void remove(String id) throws PersistenceException {
-	// TODO Auto-generated method stub
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TMECHANICS_DELETE"))) {
+		pst.setString(1, id);
+		pst.executeUpdate();
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
 
     }
 
@@ -59,16 +86,7 @@ public class MechanicGatewayImpl implements MechanicGateway {
 
 		try (ResultSet rs = pst.executeQuery()) {
 		    if (rs.next()) {
-			MechanicRecord m = new MechanicRecord();
-
-			// Igual seria buena idea crear una clase MechanicRecordAsembler y que reciba el
-			// resultSet para crear un MechanicRecord
-			m.id = rs.getString("id");
-			m.nif = rs.getString("nif");
-			m.name = rs.getString("name");
-			m.createdAt = rs.getTimestamp("createdAt")
-					.toLocalDateTime();
-
+			MechanicRecord m = MechanicRecordAssembler.toMechanicRecord(rs);
 			om = Optional.of(m);
 		    }
 		}
@@ -81,14 +99,44 @@ public class MechanicGatewayImpl implements MechanicGateway {
 
     @Override
     public List<MechanicRecord> findAll() throws PersistenceException {
-	// TODO Auto-generated method stub
-	return null;
+	List<MechanicRecord> listOfMechanics = new ArrayList<MechanicRecord>();
+
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TMECHANICS_FINDALL"))) {
+		try (ResultSet rs = pst.executeQuery();) {
+		    while (rs.next()) {
+			MechanicRecord m = MechanicRecordAssembler.toMechanicRecord(rs);
+			listOfMechanics.add(m);
+		    }
+		}
+	    }
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
+	return listOfMechanics;
     }
 
     @Override
     public Optional<MechanicRecord> findByNif(String nif) {
-	// TODO Auto-generated method stub
-	return Optional.empty();
+	Optional<MechanicRecord> om = Optional.empty();
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TMECHANICS_FINDBYNIF"))) {
+		pst.setString(1, nif);
+
+		try (ResultSet rs = pst.executeQuery()) {
+		    if (rs.next()) {
+			MechanicRecord m = MechanicRecordAssembler.toMechanicRecord(rs);
+			om = Optional.of(m);
+		    }
+		}
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
+	return om;
+
     }
 
 }

@@ -1,0 +1,68 @@
+package uo.ri.cws.application.persistence.workorder.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import uo.ri.cws.application.persistence.PersistenceException;
+import uo.ri.cws.application.persistence.workorder.WorkOrderGateway;
+import uo.ri.util.jdbc.Jdbc;
+import uo.ri.util.jdbc.Queries;
+
+public class WorkOrderGatewayImpl implements WorkOrderGateway {
+
+    @Override
+    public void add(WorkOrderRecord t) throws PersistenceException {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void remove(String id) throws PersistenceException {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void update(WorkOrderRecord t) throws PersistenceException {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Optional<WorkOrderRecord> findById(String id) throws PersistenceException {
+	// TODO Auto-generated method stub
+	return Optional.empty();
+    }
+
+    @Override
+    public List<WorkOrderRecord> findAll() throws PersistenceException {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public List<WorkOrderRecord> findActiveWorkOrderByMechanicId(String id) {
+	List<WorkOrderRecord> listOfWorkorders = new ArrayList<WorkOrderRecord>();
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TWORKORDERS_FIND_ACTIVE_BY_MECHANIC_ID"))) {
+		pst.setString(1, id);
+		try (ResultSet rs = pst.executeQuery()) {
+		    if (rs.next()) {
+			WorkOrderRecord wr = WorkOrderRecordAssembler.toRecord(rs);
+			listOfWorkorders.add(wr);
+		    }
+		}
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
+	return listOfWorkorders;
+    }
+
+}
