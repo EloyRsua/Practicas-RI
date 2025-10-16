@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import uo.ri.cws.application.persistence.PersistenceException;
+import uo.ri.cws.application.persistence.WorkOrderRecordAssembler;
 import uo.ri.cws.application.persistence.workorder.WorkOrderGateway;
 import uo.ri.util.jdbc.Jdbc;
 import uo.ri.util.jdbc.Queries;
@@ -29,15 +31,40 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 
     @Override
     public void update(WorkOrderRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
+	Timestamp now = new Timestamp(System.currentTimeMillis());
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TWORKORDERS_UPDATE"))) {
+		pst.setString(1, t.invoice_id);
+		pst.setTimestamp(2, now);
+		pst.setString(3, t.id);
+		pst.executeUpdate();
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
 
     }
 
     @Override
-    public Optional<WorkOrderRecord> findById(String id)
-	throws PersistenceException {
-	// TODO Auto-generated method stub
-	return Optional.empty();
+    public Optional<WorkOrderRecord> findById(String id) throws PersistenceException {
+	Optional<WorkOrderRecord> ow = Optional.empty();
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TWORKORDERS_FIND_BY_ID"))) {
+		pst.setString(1, id);
+
+		try (ResultSet rs = pst.executeQuery()) {
+		    if (rs.next()) {
+			WorkOrderRecord w = WorkOrderRecordAssembler.toRecord(rs);
+			ow = Optional.of(w);
+		    }
+		}
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
+	return ow;
     }
 
     @Override
@@ -51,14 +78,11 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 	List<WorkOrderRecord> listOfWorkorders = new ArrayList<WorkOrderRecord>();
 	try {
 	    Connection c = Jdbc.getCurrentConnection();
-	    try (PreparedStatement pst = c.prepareStatement(
-		Queries.getSQLSentence(
-		    "TWORKORDERS_FIND_ACTIVE_BY_MECHANIC_ID"))) {
+	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TWORKORDERS_FIND_ACTIVE_BY_MECHANIC_ID"))) {
 		pst.setString(1, id);
 		try (ResultSet rs = pst.executeQuery()) {
 		    if (rs.next()) {
-			WorkOrderRecord wr = WorkOrderRecordAssembler.toRecord(
-			    rs);
+			WorkOrderRecord wr = WorkOrderRecordAssembler.toRecord(rs);
 			listOfWorkorders.add(wr);
 		    }
 		}
@@ -76,15 +100,13 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 
 	{
 	    Connection c = Jdbc.getCurrentConnection();
-	    try (PreparedStatement pst = c.prepareStatement(
-		Queries.getSQLSentence("TWORKORDERS_FIND_NOT_INVOICED"))) {
+	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TWORKORDERS_FIND_NOT_INVOICED"))) {
 
 		pst.setString(1, nif);
 
 		try (ResultSet rs = pst.executeQuery()) {
 		    while (rs.next()) {
-			WorkOrderRecord wr = WorkOrderRecordAssembler.toRecord(
-			    rs);
+			WorkOrderRecord wr = WorkOrderRecordAssembler.toRecord(rs);
 			result.add(wr);
 		    }
 		}

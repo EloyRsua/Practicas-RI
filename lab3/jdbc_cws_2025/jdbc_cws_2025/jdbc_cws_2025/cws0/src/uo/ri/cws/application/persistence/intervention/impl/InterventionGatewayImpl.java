@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import uo.ri.cws.application.persistence.InterventionRecordAssembler;
 import uo.ri.cws.application.persistence.PersistenceException;
 import uo.ri.cws.application.persistence.intervention.InterventionGateway;
 import uo.ri.util.jdbc.Jdbc;

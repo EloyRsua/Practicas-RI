@@ -1,4 +1,4 @@
-package uo.ri.cws.application.persistence.contracts.impl;
+package uo.ri.cws.application.persistence;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

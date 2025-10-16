@@ -1,9 +1,10 @@
-package uo.ri.cws.application.invoice.crud;
+package uo.ri.cws.application.invoice.crud.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import uo.ri.conf.Factories;
+import uo.ri.cws.application.invoice.crud.InvoicingWorkOrderAssembler;
 import uo.ri.cws.application.persistence.util.command.Command;
 import uo.ri.cws.application.persistence.workorder.WorkOrderGateway;
 import uo.ri.cws.application.persistence.workorder.WorkOrderGateway.WorkOrderRecord;

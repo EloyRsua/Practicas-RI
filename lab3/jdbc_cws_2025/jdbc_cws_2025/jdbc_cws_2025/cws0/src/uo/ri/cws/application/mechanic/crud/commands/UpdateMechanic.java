@@ -1,8 +1,9 @@
-package uo.ri.cws.application.mechanic.crud;
+package uo.ri.cws.application.mechanic.crud.commands;
 
 import java.util.Optional;
 
 import uo.ri.conf.Factories;
+import uo.ri.cws.application.mechanic.crud.MechanicDtoAssembler;
 import uo.ri.cws.application.persistence.mechanic.MechanicGateway;
 import uo.ri.cws.application.persistence.mechanic.MechanicGateway.MechanicRecord;
 import uo.ri.cws.application.persistence.util.command.Command;

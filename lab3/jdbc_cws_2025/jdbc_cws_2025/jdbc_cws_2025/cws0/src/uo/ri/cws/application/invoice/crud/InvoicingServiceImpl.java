@@ -4,57 +4,52 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import uo.ri.cws.application.invoice.crud.commands.FindNotInvoicedWorkOrdersByClient;
+import uo.ri.cws.application.invoice.crud.commands.InvoiceWorkorder;
+import uo.ri.cws.application.persistence.util.command.CommandExecutor;
 import uo.ri.cws.application.service.invoice.InvoicingService;
 import uo.ri.util.exception.BusinessException;
 
 public class InvoicingServiceImpl implements InvoicingService {
 
+    CommandExecutor executor = new CommandExecutor();
+
     @Override
-    public InvoiceDto create(List<String> workOrderIds)
-	throws BusinessException {
-	InvoiceWorkorder iw = new InvoiceWorkorder(workOrderIds);
-	return iw.execute();
+    public InvoiceDto create(List<String> workOrderIds) throws BusinessException {
+	return executor.execute(new InvoiceWorkorder(workOrderIds));
     }
 
     @Override
-    public List<InvoicingWorkOrderDto> findWorkOrdersByClientNif(String nif)
-	throws BusinessException {
+    public List<InvoicingWorkOrderDto> findWorkOrdersByClientNif(String nif) throws BusinessException {
 	// TODO Auto-generated method stub
 	return null;
     }
 
     @Override
-    public List<InvoicingWorkOrderDto> findNotInvoicedWorkOrdersByClientNif(
-	String nif) throws BusinessException {
-	FindNotInvoicedWorkOrdersByClient fni = new FindNotInvoicedWorkOrdersByClient(
-	    nif);
-	return fni.execute();
+    public List<InvoicingWorkOrderDto> findNotInvoicedWorkOrdersByClientNif(String nif) throws BusinessException {
+	return executor.execute(new FindNotInvoicedWorkOrdersByClient(nif));
     }
 
     @Override
-    public List<InvoicingWorkOrderDto> findWorkOrdersByPlateNumber(String plate)
-	throws BusinessException {
+    public List<InvoicingWorkOrderDto> findWorkOrdersByPlateNumber(String plate) throws BusinessException {
 	// TODO Auto-generated method stub
 	return null;
     }
 
     @Override
-    public Optional<InvoiceDto> findInvoiceByNumber(Long number)
-	throws BusinessException {
+    public Optional<InvoiceDto> findInvoiceByNumber(Long number) throws BusinessException {
 	// TODO Auto-generated method stub
 	return Optional.empty();
     }
 
     @Override
-    public List<PaymentMeanDto> findPayMeansByClientNif(String nif)
-	throws BusinessException {
+    public List<PaymentMeanDto> findPayMeansByClientNif(String nif) throws BusinessException {
 	// TODO Auto-generated method stub
 	return null;
     }
 
     @Override
-    public void settleInvoice(String invoiceId, Map<String, Double> charges)
-	throws BusinessException {
+    public void settleInvoice(String invoiceId, Map<String, Double> charges) throws BusinessException {
 	// TODO Auto-generated method stub
 
     }
