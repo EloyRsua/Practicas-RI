@@ -34,7 +34,8 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
     }
 
     @Override
-    public Optional<WorkOrderRecord> findById(String id) throws PersistenceException {
+    public Optional<WorkOrderRecord> findById(String id)
+	throws PersistenceException {
 	// TODO Auto-generated method stub
 	return Optional.empty();
     }
@@ -50,11 +51,14 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 	List<WorkOrderRecord> listOfWorkorders = new ArrayList<WorkOrderRecord>();
 	try {
 	    Connection c = Jdbc.getCurrentConnection();
-	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TWORKORDERS_FIND_ACTIVE_BY_MECHANIC_ID"))) {
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence(
+		    "TWORKORDERS_FIND_ACTIVE_BY_MECHANIC_ID"))) {
 		pst.setString(1, id);
 		try (ResultSet rs = pst.executeQuery()) {
 		    if (rs.next()) {
-			WorkOrderRecord wr = WorkOrderRecordAssembler.toRecord(rs);
+			WorkOrderRecord wr = WorkOrderRecordAssembler.toRecord(
+			    rs);
 			listOfWorkorders.add(wr);
 		    }
 		}
@@ -63,6 +67,32 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 	    throw new PersistenceException(e);
 	}
 	return listOfWorkorders;
+    }
+
+    @Override
+    public List<WorkOrderRecord> findNotInvoicedWorkOrders(String nif) {
+	List<WorkOrderRecord> result = new ArrayList<>();
+	try
+
+	{
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TWORKORDERS_FIND_NOT_INVOICED"))) {
+
+		pst.setString(1, nif);
+
+		try (ResultSet rs = pst.executeQuery()) {
+		    while (rs.next()) {
+			WorkOrderRecord wr = WorkOrderRecordAssembler.toRecord(
+			    rs);
+			result.add(wr);
+		    }
+		}
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
+	return result;
     }
 
 }

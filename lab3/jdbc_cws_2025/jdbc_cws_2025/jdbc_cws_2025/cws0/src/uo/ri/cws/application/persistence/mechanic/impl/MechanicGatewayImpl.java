@@ -21,7 +21,8 @@ public class MechanicGatewayImpl implements MechanicGateway {
 	    Connection c = Jdbc.getCurrentConnection();
 	    Timestamp now = new Timestamp(System.currentTimeMillis());
 
-	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TMECHANICS_ADD"))) {
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TMECHANICS_ADD"))) {
 		pst.setString(1, t.id);
 		pst.setString(2, t.nif);
 		pst.setString(3, t.name);
@@ -43,7 +44,8 @@ public class MechanicGatewayImpl implements MechanicGateway {
     public void remove(String id) throws PersistenceException {
 	try {
 	    Connection c = Jdbc.getCurrentConnection();
-	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TMECHANICS_DELETE"))) {
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TMECHANICS_DELETE"))) {
 		pst.setString(1, id);
 		pst.executeUpdate();
 	    }
@@ -58,7 +60,8 @@ public class MechanicGatewayImpl implements MechanicGateway {
 	Timestamp now = new Timestamp(System.currentTimeMillis());
 	try {
 	    Connection c = Jdbc.getCurrentConnection();
-	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TMECHANICS_UPDATE"))) {
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TMECHANICS_UPDATE"))) {
 		pst.setString(1, t.id);
 		pst.setString(2, t.nif);
 		pst.setString(3, t.name);
@@ -77,16 +80,18 @@ public class MechanicGatewayImpl implements MechanicGateway {
     }
 
     @Override
-    public Optional<MechanicRecord> findById(String id) throws PersistenceException {
+    public Optional<MechanicRecord> findById(String id)
+	throws PersistenceException {
 	Optional<MechanicRecord> om = Optional.empty();
 	try {
 	    Connection c = Jdbc.getCurrentConnection();
-	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TMECHANICS_FINDBYID"))) {
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TMECHANICS_FINDBYID"))) {
 		pst.setString(1, id);
 
 		try (ResultSet rs = pst.executeQuery()) {
 		    if (rs.next()) {
-			MechanicRecord m = MechanicRecordAssembler.toMechanicRecord(rs);
+			MechanicRecord m = MechanicRecordAssembler.toRecord(rs);
 			om = Optional.of(m);
 		    }
 		}
@@ -103,10 +108,11 @@ public class MechanicGatewayImpl implements MechanicGateway {
 
 	try {
 	    Connection c = Jdbc.getCurrentConnection();
-	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TMECHANICS_FINDALL"))) {
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TMECHANICS_FINDALL"))) {
 		try (ResultSet rs = pst.executeQuery();) {
 		    while (rs.next()) {
-			MechanicRecord m = MechanicRecordAssembler.toMechanicRecord(rs);
+			MechanicRecord m = MechanicRecordAssembler.toRecord(rs);
 			listOfMechanics.add(m);
 		    }
 		}
@@ -122,12 +128,13 @@ public class MechanicGatewayImpl implements MechanicGateway {
 	Optional<MechanicRecord> om = Optional.empty();
 	try {
 	    Connection c = Jdbc.getCurrentConnection();
-	    try (PreparedStatement pst = c.prepareStatement(Queries.getSQLSentence("TMECHANICS_FINDBYNIF"))) {
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TMECHANICS_FINDBYNIF"))) {
 		pst.setString(1, nif);
 
 		try (ResultSet rs = pst.executeQuery()) {
 		    if (rs.next()) {
-			MechanicRecord m = MechanicRecordAssembler.toMechanicRecord(rs);
+			MechanicRecord m = MechanicRecordAssembler.toRecord(rs);
 			om = Optional.of(m);
 		    }
 		}

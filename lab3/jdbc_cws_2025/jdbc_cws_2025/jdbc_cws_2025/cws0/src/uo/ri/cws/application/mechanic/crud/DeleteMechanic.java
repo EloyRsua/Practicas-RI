@@ -1,18 +1,29 @@
 package uo.ri.cws.application.mechanic.crud;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 
+import uo.ri.conf.Factories;
+import uo.ri.cws.application.persistence.contracts.ContractGateway;
+import uo.ri.cws.application.persistence.contracts.ContractGateway.ContractRecord;
+import uo.ri.cws.application.persistence.intervention.InterventionGateway;
+import uo.ri.cws.application.persistence.intervention.InterventionGateway.InterventionRecord;
+import uo.ri.cws.application.persistence.mechanic.MechanicGateway;
+import uo.ri.cws.application.persistence.mechanic.MechanicGateway.MechanicRecord;
+import uo.ri.cws.application.persistence.util.command.Command;
+import uo.ri.cws.application.persistence.workorder.WorkOrderGateway;
+import uo.ri.cws.application.persistence.workorder.WorkOrderGateway.WorkOrderRecord;
 import uo.ri.util.assertion.ArgumentChecks;
+import uo.ri.util.exception.BusinessChecks;
 import uo.ri.util.exception.BusinessException;
-import uo.ri.util.jdbc.Jdbc;
 
-public class DeleteMechanic {
+public class DeleteMechanic implements Command<Void> {
 
-    private static final String SQL_CHECK_INTERVENTIONS = "SELECT * FROM TINTERVENTIONS WHERE mechanic_id=?";
-    private static final String SQL_CHECK_CONTRACTS_INFORCE = "SELECT * FROM TCONTRACTS WHERE mechanic_id=? AND state='IN_FORCE' or state='TERMINATED'";
+    private MechanicGateway mg = Factories.persistence.forMechanic();
+    private ContractGateway mc = Factories.persistence.forContract();
+    private WorkOrderGateway mw = Factories.persistence.forWorkOrder();
+    private InterventionGateway mi = Factories.persistence.forIntervention();
+
     private final String idMechanic;
 
     public DeleteMechanic(String mechanicId) {
@@ -20,45 +31,25 @@ public class DeleteMechanic {
 	this.idMechanic = mechanicId;
     }
 
-    public void execute() throws BusinessException {
-	try (Connection c = Jdbc.createThreadConnection()) {
-	    checkConditions(c);
-	    executeQuery(c);
-	} catch (SQLException e) {
-	    throw new RuntimeException(e);
-	}
+    @Override
+    public Void execute() throws BusinessException {
+	Optional<MechanicRecord> om = mg.findById(idMechanic);
+	BusinessChecks.exists(om, "The mechanic does not exist");
+	List<WorkOrderRecord> listWo = mw.findActiveWorkOrderByMechanicId(
+	    idMechanic);
+	BusinessChecks.isEmpty(listWo,
+	    "There are workorders assigned to this mechanic");
+	List<ContractRecord> listCo = mc.findActiveContractByMechanicId(
+	    idMechanic);
+	BusinessChecks.isEmpty(listCo,
+	    "There are active contracts  assigned to this mechanic");
+	List<InterventionRecord> listInt = mi.findInterventionsByMechanicId(
+	    idMechanic);
+	BusinessChecks.isEmpty(listInt,
+	    "There are interventins assigned to this mechanic");
+
+	mg.remove(idMechanic);
+	return null;
     }
 
-    private void checkConditions(Connection c) throws BusinessException, SQLException {
-	checkIfExists(c);
-	checkWorkOrders(c);
-	checkContractsInForce(c);
-	checkInterventions(c);
-    }
-
-    private void checkWorkOrders(Connection c) throws BusinessException, SQLException {
-
-    }
-
-    private void checkContractsInForce(Connection c) throws BusinessException, SQLException {
-	try (PreparedStatement pst = c.prepareStatement(SQL_CHECK_CONTRACTS_INFORCE)) {
-	    pst.setString(1, idMechanic);
-	    try (ResultSet rs = pst.executeQuery()) {
-		if (rs.next()) {
-		    throw new BusinessException("No se pueden borrar mecánicos con contratos activos, id: " + idMechanic);
-		}
-	    }
-	}
-    }
-
-    private void checkInterventions(Connection c) throws BusinessException, SQLException {
-	try (PreparedStatement pst = c.prepareStatement(SQL_CHECK_INTERVENTIONS)) {
-	    pst.setString(1, idMechanic);
-	    try (ResultSet rs = pst.executeQuery()) {
-		if (rs.next()) {
-		    throw new BusinessException("No se pueden borrar mecánicos con intervenciones, id: " + idMechanic);
-		}
-	    }
-	}
-    }
 }

@@ -1,7 +1,13 @@
 package uo.ri.cws.application.persistence;
 
+import uo.ri.cws.application.persistence.contracts.ContractGateway;
+import uo.ri.cws.application.persistence.contracts.impl.ContractGatewayImpl;
+import uo.ri.cws.application.persistence.intervention.InterventionGateway;
+import uo.ri.cws.application.persistence.intervention.impl.InterventionGatewayImpl;
 import uo.ri.cws.application.persistence.mechanic.MechanicGateway;
 import uo.ri.cws.application.persistence.mechanic.impl.MechanicGatewayImpl;
+import uo.ri.cws.application.persistence.workorder.WorkOrderGateway;
+import uo.ri.cws.application.persistence.workorder.impl.WorkOrderGatewayImpl;
 
 public class PersistenceFactory {
 
@@ -9,17 +15,18 @@ public class PersistenceFactory {
 	return new MechanicGatewayImpl();
     }
 
-//    public WorkOrderGateway forWorkOrder() {
-//        return new WorkOrderGatewayImpl();
-//    }
-//
+    public WorkOrderGateway forWorkOrder() {
+	return new WorkOrderGatewayImpl();
+    }
+
 //    public InvoiceGateway forInvoice() {
 //        return new InvoiceGatewayImpl();
 //    }
 //
-//    public InterventionGateway forIntervention() {
-//        return new InterventionGatewayImpl();
-//    }
+    public InterventionGateway forIntervention() {
+	return new InterventionGatewayImpl();
+    }
+
 //
 //    public SparePartGateway forSparePart() {
 //        return new SparePartGatewayImpl();
@@ -37,9 +44,9 @@ public class PersistenceFactory {
 //        return new VehicleGatewayImpl();
 //    }
 //
-//    public ContractGateway forContract() {
-//        return new ContractGatewayImpl();
-//    }
+    public ContractGateway forContract() {
+	return new ContractGatewayImpl();
+    }
 //
 //    public ProfessionalGroupGateway forProfessionalGroup() {
 //        return new ProfessionalGroupGatewayImpl();
