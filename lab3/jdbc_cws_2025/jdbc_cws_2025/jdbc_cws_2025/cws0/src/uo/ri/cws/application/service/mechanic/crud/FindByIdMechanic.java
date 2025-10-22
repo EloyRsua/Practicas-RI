@@ -22,12 +22,7 @@ public class FindByIdMechanic implements Command<Optional<MechanicDto>> {
     public Optional<MechanicDto> execute() {
 
 	Optional<MechanicRecord> omr = mg.findById(id);
-	MechanicDto dto = MechanicDtoAssembler.toDto(omr.get());
-	if (dto.equals(null)) {
-	    return Optional.empty();
-	} else {
-	    Optional<MechanicDto> odto = Optional.of(dto);
-	    return odto;
-	}
+	Optional<MechanicDto> maybeDto = omr.map(MechanicDtoAssembler::toDto);
+	return maybeDto;
     }
 }

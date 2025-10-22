@@ -1,5 +1,6 @@
 package uo.ri.cws.application.service.mechanic.crud;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import uo.ri.conf.Factories;
@@ -11,7 +12,7 @@ import uo.ri.cws.application.service.mechanic.MechanicCrudService.MechanicDto;
 public class ListAllMechanics implements Command<List<MechanicDto>> {
 
     private MechanicGateway mg = Factories.persistence.forMechanic();
-    private List<MechanicDto> listOfMechanics;
+    private List<MechanicDto> listOfMechanics = new ArrayList<MechanicDto>();
 
     @Override
     public List<MechanicDto> execute() {

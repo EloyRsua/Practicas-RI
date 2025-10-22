@@ -8,10 +8,6 @@ import uo.ri.cws.application.service.mechanic.MechanicCrudService.MechanicDto;
 public class MechanicDtoAssembler {
 
     public static MechanicDto toDto(MechanicRecord record) {
-	if (record == null) {
-	    return null;
-	}
-
 	MechanicDto dto = new MechanicDto();
 	dto.id = record.id;
 	dto.version = record.version;
@@ -22,10 +18,6 @@ public class MechanicDtoAssembler {
     }
 
     public static MechanicRecord toRecord(MechanicDto dto) {
-	if (dto == null) {
-	    return null;
-	}
-
 	MechanicRecord record = new MechanicRecord();
 	record.id = dto.id;
 	record.version = dto.version;
@@ -36,7 +28,7 @@ public class MechanicDtoAssembler {
 	// Campos gestionados internamente por la BD o el dominio
 	record.createdAt = LocalDateTime.now();
 	record.updatedAt = LocalDateTime.now();
-	record.entityState = "ACTIVE"; // o el estado por defecto que uses
+	record.entityState = "ENABLED"; // o el estado por defecto que uses
 
 	return record;
     }

@@ -8,26 +8,16 @@ import uo.ri.cws.application.persistence.mechanic.MechanicGateway.MechanicRecord
 public class MechanicRecordAssembler {
 
     public static MechanicRecord toRecord(ResultSet rs) throws SQLException {
-	if (rs == null) {
-	    return null;
-	}
-
 	MechanicRecord m = new MechanicRecord();
 
-	m.id = rs.getString("id");
-	m.version = rs.getLong("version");
+	m.id = rs.getString("ID");
+	m.version = rs.getLong("VERSION");
 
-	var createdAt = rs.getTimestamp("createdAt");
-	var updatedAt = rs.getTimestamp("updatedAt");
-
-	m.createdAt = (createdAt != null) ? createdAt.toLocalDateTime() : null;
-	m.updatedAt = (updatedAt != null) ? updatedAt.toLocalDateTime() : null;
-
-	m.entityState = rs.getString("entityState");
-	m.name = rs.getString("name");
-	m.nif = rs.getString("nif");
-	m.surname = rs.getString("surname");
+	m.name = rs.getString("NAME");
+	m.nif = rs.getString("NIF");
+	m.surname = rs.getString("SURNAME");
 
 	return m;
     }
+
 }

@@ -62,14 +62,10 @@ public class MechanicGatewayImpl implements MechanicGateway {
 	    Connection c = Jdbc.getCurrentConnection();
 	    try (PreparedStatement pst = c.prepareStatement(
 		Queries.getSQLSentence("TMECHANICS_UPDATE"))) {
-		pst.setString(1, t.id);
-		pst.setString(2, t.nif);
-		pst.setString(3, t.name);
-		pst.setString(4, t.surname);
-		pst.setLong(5, t.version);
-		pst.setTimestamp(6, now);
-		pst.setTimestamp(7, now);
-		pst.setString(8, "ENABLED");
+		pst.setString(1, t.name);
+		pst.setString(2, t.surname);
+		pst.setTimestamp(3, now);
+		pst.setString(4, t.id);
 
 		pst.executeUpdate();
 	    }

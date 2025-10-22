@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import uo.ri.cws.application.persistence.PersistenceException;
 import uo.ri.cws.application.persistence.invoice.InvoiceGateway;
@@ -17,19 +17,21 @@ public class InvoiceGatewayImpl implements InvoiceGateway {
 
     @Override
     public void add(InvoiceRecord t) throws PersistenceException {
+	Timestamp now = new Timestamp(System.currentTimeMillis());
 	try {
 	    Connection connection = Jdbc.getCurrentConnection();
-	    String idInvoice = UUID.randomUUID()
-				   .toString();
 	    try (PreparedStatement pst = connection.prepareStatement(
 		Queries.getSQLSentence("TINVOICES_INSERT"))) {
-		pst.setString(1, idInvoice);
+		pst.setString(1, t.id);
 		pst.setLong(2, t.number);
 		pst.setDate(3, java.sql.Date.valueOf(t.date));
 		pst.setDouble(4, t.vat);
 		pst.setDouble(5, t.amount);
 		pst.setString(6, "NOT_YET_PAID");
 		pst.setLong(7, 1L);
+		pst.setTimestamp(8, now);
+		pst.setTimestamp(9, now);
+		pst.setString(10, "ENABLED");
 		pst.executeUpdate();
 	    }
 	} catch (SQLException e) {

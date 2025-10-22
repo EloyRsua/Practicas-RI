@@ -36,16 +36,9 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 	    try (PreparedStatement pst = c.prepareStatement(
 		Queries.getSQLSentence("TWORKORDERS_UPDATE"))) {
 
-		pst.setDouble(1, t.amount);
-		pst.setTimestamp(2, java.sql.Timestamp.valueOf(t.date));
-		pst.setString(3, t.description);
-		pst.setString(4, t.state);
-		pst.setTimestamp(5, now);
-		pst.setString(6, t.invoice_id);
-		pst.setString(7, t.mechanic_id);
-		pst.setString(8, t.vehicle_id);
-		pst.setString(9, t.id);
-
+		pst.setTimestamp(1, now);
+		pst.setString(2, t.invoice_id);
+		pst.setString(3, t.id);
 		pst.executeUpdate();
 	    }
 	} catch (SQLException e) {
