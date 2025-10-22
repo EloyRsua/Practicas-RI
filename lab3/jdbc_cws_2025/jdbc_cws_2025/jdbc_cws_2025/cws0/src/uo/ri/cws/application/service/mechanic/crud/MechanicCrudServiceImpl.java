@@ -1,4 +1,4 @@
-package uo.ri.cws.application.mechanic.crud;
+package uo.ri.cws.application.service.mechanic.crud;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +18,7 @@ public class MechanicCrudServiceImpl implements MechanicCrudService {
 
     @Override
     public void delete(String mechanicId) throws BusinessException {
-	DeleteMechanic dm = new DeleteMechanic(mechanicId);
-	dm.execute();
+	executuor.execute(new DeleteMechanic(mechanicId));
 
     }
 
@@ -30,20 +29,18 @@ public class MechanicCrudServiceImpl implements MechanicCrudService {
 
     @Override
     public Optional<MechanicDto> findById(String id) throws BusinessException {
-	FindByIdMechanic fbi = new FindByIdMechanic(id);
-	return fbi.execute();
+	return executuor.execute(new FindByIdMechanic(id));
     }
 
     @Override
-    public Optional<MechanicDto> findByNif(String nif) throws BusinessException {
-	ListMechanic lm = new ListMechanic(nif);
-	return lm.execute();
+    public Optional<MechanicDto> findByNif(String nif)
+	throws BusinessException {
+	return executuor.execute(new FindByNifMechanic(nif));
     }
 
     @Override
     public List<MechanicDto> findAll() throws BusinessException {
-	ListAllMechanics lam = new ListAllMechanics();
-	return lam.execute();
+	return executuor.execute(new ListAllMechanics());
     }
 
 }

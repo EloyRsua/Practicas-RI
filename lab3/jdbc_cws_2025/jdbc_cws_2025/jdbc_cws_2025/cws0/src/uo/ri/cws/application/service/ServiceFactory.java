@@ -1,13 +1,13 @@
 package uo.ri.cws.application.service;
 
-import uo.ri.cws.application.invoice.crud.InvoicingServiceImpl;
-import uo.ri.cws.application.mechanic.crud.MechanicCrudServiceImpl;
 import uo.ri.cws.application.service.client.ClientCrudService;
 import uo.ri.cws.application.service.client.ClientHistoryService;
 import uo.ri.cws.application.service.contract.ContractCrudService;
 import uo.ri.cws.application.service.contracttype.ContractTypeCrudService;
 import uo.ri.cws.application.service.invoice.InvoicingService;
+import uo.ri.cws.application.service.invoice.crud.InvoicingServiceImpl;
 import uo.ri.cws.application.service.mechanic.MechanicCrudService;
+import uo.ri.cws.application.service.mechanic.crud.MechanicCrudServiceImpl;
 import uo.ri.cws.application.service.payroll.PayrollService;
 import uo.ri.cws.application.service.professionalgroup.ProfessionalGroupCrudService;
 import uo.ri.cws.application.service.spare.SparePartCrudService;

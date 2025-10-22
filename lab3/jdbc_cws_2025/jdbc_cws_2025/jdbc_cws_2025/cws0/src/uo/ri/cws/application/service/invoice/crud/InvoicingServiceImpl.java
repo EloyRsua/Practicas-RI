@@ -1,19 +1,20 @@
-package uo.ri.cws.application.invoice.crud;
+package uo.ri.cws.application.service.invoice.crud;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import uo.ri.cws.application.persistence.util.command.CommandExecutor;
 import uo.ri.cws.application.service.invoice.InvoicingService;
 import uo.ri.util.exception.BusinessException;
 
 public class InvoicingServiceImpl implements InvoicingService {
+    private CommandExecutor executor = new CommandExecutor();
 
     @Override
     public InvoiceDto create(List<String> workOrderIds)
 	throws BusinessException {
-	InvoiceWorkorder iw = new InvoiceWorkorder(workOrderIds);
-	return iw.execute();
+	return executor.execute(new InvoiceWorkorder(workOrderIds));
     }
 
     @Override
@@ -26,9 +27,7 @@ public class InvoicingServiceImpl implements InvoicingService {
     @Override
     public List<InvoicingWorkOrderDto> findNotInvoicedWorkOrdersByClientNif(
 	String nif) throws BusinessException {
-	FindNotInvoicedWorkOrdersByClient fni = new FindNotInvoicedWorkOrdersByClient(
-	    nif);
-	return fni.execute();
+	return executor.execute(new FindNotInvoicedWorkOrdersByClient(nif));
     }
 
     @Override

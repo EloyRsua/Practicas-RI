@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,15 +30,51 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 
     @Override
     public void update(WorkOrderRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
+	Timestamp now = new Timestamp(System.currentTimeMillis());
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TWORKORDERS_UPDATE"))) {
 
+		pst.setDouble(1, t.amount);
+		pst.setTimestamp(2, java.sql.Timestamp.valueOf(t.date));
+		pst.setString(3, t.description);
+		pst.setString(4, t.state);
+		pst.setTimestamp(5, now);
+		pst.setString(6, t.invoice_id);
+		pst.setString(7, t.mechanic_id);
+		pst.setString(8, t.vehicle_id);
+		pst.setString(9, t.id);
+
+		pst.executeUpdate();
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
     }
 
     @Override
     public Optional<WorkOrderRecord> findById(String id)
 	throws PersistenceException {
-	// TODO Auto-generated method stub
-	return Optional.empty();
+	Optional<WorkOrderRecord> om = Optional.empty();
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TWORKORDERS_FIND_BY_ID"))) {
+		pst.setString(1, id);
+
+		try (ResultSet rs = pst.executeQuery()) {
+		    if (rs.next()) {
+			WorkOrderRecord m = WorkOrderRecordAssembler.toRecord(
+			    rs);
+			om = Optional.of(m);
+		    }
+		}
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
+	return om;
     }
 
     @Override

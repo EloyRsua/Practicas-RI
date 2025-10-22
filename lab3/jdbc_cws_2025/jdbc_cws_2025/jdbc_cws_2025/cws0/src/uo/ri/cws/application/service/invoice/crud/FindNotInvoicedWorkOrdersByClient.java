@@ -1,4 +1,4 @@
-package uo.ri.cws.application.invoice.crud;
+package uo.ri.cws.application.service.invoice.crud;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package uo.ri.cws.application.mechanic.crud;
+package uo.ri.cws.application.service.mechanic.crud;
 
 import java.util.List;
 

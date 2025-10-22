@@ -1,4 +1,4 @@
-package uo.ri.cws.application.mechanic.crud;
+package uo.ri.cws.application.service.mechanic.crud;
 
 import java.util.Optional;
 
@@ -8,23 +8,21 @@ import uo.ri.cws.application.persistence.mechanic.MechanicGateway.MechanicRecord
 import uo.ri.cws.application.persistence.util.command.Command;
 import uo.ri.cws.application.service.mechanic.MechanicCrudService.MechanicDto;
 import uo.ri.util.assertion.ArgumentChecks;
-import uo.ri.util.exception.BusinessException;
 
-public class ListMechanic implements Command<Optional<MechanicDto>> {
-
-    private String nif;
+public class FindByIdMechanic implements Command<Optional<MechanicDto>> {
+    private String id;
     private MechanicGateway mg = Factories.persistence.forMechanic();
 
-    public ListMechanic(String nif) {
-	ArgumentChecks.isNotBlank(nif);
-
-	this.nif = nif;
+    public FindByIdMechanic(String id) {
+	ArgumentChecks.isNotBlank(id);
+	this.id = id;
     }
 
     @Override
-    public Optional<MechanicDto> execute() throws BusinessException {
-	Optional<MechanicRecord> om = mg.findByNif(nif);
-	MechanicDto dto = MechanicDtoAssembler.toDto(om.get());
+    public Optional<MechanicDto> execute() {
+
+	Optional<MechanicRecord> omr = mg.findById(id);
+	MechanicDto dto = MechanicDtoAssembler.toDto(omr.get());
 	if (dto.equals(null)) {
 	    return Optional.empty();
 	} else {
@@ -32,5 +30,4 @@ public class ListMechanic implements Command<Optional<MechanicDto>> {
 	    return odto;
 	}
     }
-
 }

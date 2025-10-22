@@ -4,6 +4,8 @@ import uo.ri.cws.application.persistence.contracts.ContractGateway;
 import uo.ri.cws.application.persistence.contracts.impl.ContractGatewayImpl;
 import uo.ri.cws.application.persistence.intervention.InterventionGateway;
 import uo.ri.cws.application.persistence.intervention.impl.InterventionGatewayImpl;
+import uo.ri.cws.application.persistence.invoice.InvoiceGateway;
+import uo.ri.cws.application.persistence.invoice.impl.InvoiceGatewayImpl;
 import uo.ri.cws.application.persistence.mechanic.MechanicGateway;
 import uo.ri.cws.application.persistence.mechanic.impl.MechanicGatewayImpl;
 import uo.ri.cws.application.persistence.workorder.WorkOrderGateway;
@@ -19,10 +21,10 @@ public class PersistenceFactory {
 	return new WorkOrderGatewayImpl();
     }
 
-//    public InvoiceGateway forInvoice() {
-//        return new InvoiceGatewayImpl();
-//    }
-//
+    public InvoiceGateway forInvoice() {
+	return new InvoiceGatewayImpl();
+    }
+
     public InterventionGateway forIntervention() {
 	return new InterventionGatewayImpl();
     }
