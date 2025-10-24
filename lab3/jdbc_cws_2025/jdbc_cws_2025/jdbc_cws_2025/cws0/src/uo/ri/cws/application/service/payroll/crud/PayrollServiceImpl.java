@@ -15,7 +15,6 @@ public class PayrollServiceImpl implements PayrollService {
     @Override
     public List<PayrollDto> generateForPreviousMonth()
 	throws BusinessException {
-	// TODO Auto-generated method stub
 	return null;
     }
 
@@ -29,14 +28,13 @@ public class PayrollServiceImpl implements PayrollService {
     @Override
     public void deleteLastGeneratedOfMechanicId(String mechanicId)
 	throws BusinessException {
-	// TODO Auto-generated method stub
-
+	executor.execute(
+	    new DeleteLastGeneratedPayrollForAMechanic(mechanicId));
     }
 
     @Override
     public int deleteLastGenerated() throws BusinessException {
-	// TODO Auto-generated method stub
-	return 0;
+	return executor.execute(new DeleteLasGeneratedPayroll());
     }
 
     @Override
@@ -47,15 +45,15 @@ public class PayrollServiceImpl implements PayrollService {
     @Override
     public List<PayrollSummaryDto> findAllSummarized()
 	throws BusinessException {
-	// TODO Auto-generated method stub
-	return null;
+
+	return executor.execute(new FindAllPayrolls());
     }
 
     @Override
     public List<PayrollSummaryDto> findSummarizedByMechanicId(String id)
 	throws BusinessException {
-	// TODO Auto-generated method stub
-	return null;
+
+	return executor.execute(new FindPayrollByMechanicId(id));
     }
 
     @Override

@@ -68,7 +68,7 @@ public class ProfessionalGroupGatewayImpl implements ProfessionalGroupGateway {
 	try {
 	    Connection c = Jdbc.getCurrentConnection();
 	    try (PreparedStatement pst = c.prepareStatement(
-		Queries.getSQLSentence("TPAYROLLS_FINDBY_GROUP_NAME"))) {
+		Queries.getSQLSentence("TPROFGROUPS_FINDBY_GROUP_NAME"))) {
 		pst.setString(1, name);
 
 		try (ResultSet rs = pst.executeQuery()) {

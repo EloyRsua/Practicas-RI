@@ -13,6 +13,8 @@ public interface PayrollGateway extends Gateway<PayrollRecord> {
 
     public List<PayrollRecord> findPayrollsByMechanicId(String mechanicId);
 
+    public List<PayrollRecord> findPayrollsByLocalDate(LocalDate date);
+
     public class PayrollRecord extends Record {
 	public String contract_id;
 	public LocalDate date;
@@ -23,4 +25,7 @@ public interface PayrollGateway extends Gateway<PayrollRecord> {
 	public double nic_Deduction;
 	public double tax_Deduction;
     }
+
+    public List<PayrollRecord> findPayrollsByLocalDateAndMechanicId(
+	String mechanicId, LocalDate date);
 }
