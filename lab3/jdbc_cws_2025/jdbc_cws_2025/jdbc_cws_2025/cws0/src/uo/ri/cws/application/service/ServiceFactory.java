@@ -9,6 +9,7 @@ import uo.ri.cws.application.service.invoice.crud.InvoicingServiceImpl;
 import uo.ri.cws.application.service.mechanic.MechanicCrudService;
 import uo.ri.cws.application.service.mechanic.crud.MechanicCrudServiceImpl;
 import uo.ri.cws.application.service.payroll.PayrollService;
+import uo.ri.cws.application.service.payroll.crud.PayrollServiceImpl;
 import uo.ri.cws.application.service.professionalgroup.ProfessionalGroupCrudService;
 import uo.ri.cws.application.service.spare.SparePartCrudService;
 import uo.ri.cws.application.service.vehicle.VehicleCrudService;
@@ -47,7 +48,7 @@ public class ServiceFactory {
     }
 
     public PayrollService forPayrollService() {
-	throw new NotYetImplementedException();
+	return new PayrollServiceImpl();
     }
 
     public ProfessionalGroupCrudService forProfessionalGroupCrudService() {
