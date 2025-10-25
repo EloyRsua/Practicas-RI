@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +20,32 @@ public class PayrollGatewayImpl implements PayrollGateway {
 
     @Override
     public void add(PayrollRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
+	Timestamp now = new Timestamp(System.currentTimeMillis());
+	try {
+	    Connection connection = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = connection.prepareStatement(
+		Queries.getSQLSentence("TPAYROLLS_INSERT"))) {
 
+		pst.setString(1, t.id); // id
+		pst.setString(2, t.contract_id); // contract_id
+		pst.setDate(3, java.sql.Date.valueOf(t.date)); // date
+		pst.setDouble(4, t.base_Salary); // base salary
+		pst.setDouble(5, t.extra_Salary); // extra salary
+		pst.setDouble(6, t.productivity_Earning); // productivity
+							  // earning
+		pst.setDouble(7, t.triennium_Earning); // triennium earning
+		pst.setDouble(8, t.nic_Deduction); // NIC deduction
+		pst.setDouble(9, t.tax_Deduction); // tax deduction
+		pst.setLong(10, 1L); // version (default 1)
+		pst.setTimestamp(11, now); // createdAt
+		pst.setTimestamp(12, now); // updatedAt
+		pst.setString(13, "ENABLED"); // entityState
+
+		pst.executeUpdate();
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
     }
 
     @Override

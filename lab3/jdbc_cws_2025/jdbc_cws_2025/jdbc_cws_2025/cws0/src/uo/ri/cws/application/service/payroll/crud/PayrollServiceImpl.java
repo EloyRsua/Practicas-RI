@@ -15,14 +15,13 @@ public class PayrollServiceImpl implements PayrollService {
     @Override
     public List<PayrollDto> generateForPreviousMonth()
 	throws BusinessException {
-	return null;
+	return generateForPreviousMonthOf(LocalDate.now());
     }
 
     @Override
     public List<PayrollDto> generateForPreviousMonthOf(LocalDate present)
 	throws BusinessException {
-	// TODO Auto-generated method stub
-	return null;
+	return executor.execute(new GeneratePayrolls(present));
     }
 
     @Override
@@ -45,7 +44,6 @@ public class PayrollServiceImpl implements PayrollService {
     @Override
     public List<PayrollSummaryDto> findAllSummarized()
 	throws BusinessException {
-
 	return executor.execute(new FindAllPayrolls());
     }
 

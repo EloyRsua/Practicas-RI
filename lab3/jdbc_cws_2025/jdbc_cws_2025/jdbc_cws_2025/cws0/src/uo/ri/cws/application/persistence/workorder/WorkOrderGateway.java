@@ -1,5 +1,6 @@
 package uo.ri.cws.application.persistence.workorder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,4 +32,7 @@ public interface WorkOrderGateway extends Gateway<WorkOrderRecord> {
 	public String mechanic_id;
 	public String vehicle_id;
     }
+
+    public double findTotalForMechanicInMonth(String mechanic_id,
+	LocalDate date);
 }

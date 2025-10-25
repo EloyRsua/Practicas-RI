@@ -1,9 +1,11 @@
 package uo.ri.cws.application.persistence.contracts.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,8 +38,22 @@ public class ContractGatewayImpl implements ContractGateway {
     @Override
     public Optional<ContractRecord> findById(String id)
 	throws PersistenceException {
-	// TODO Auto-generated method stub
-	return Optional.empty();
+	Optional<ContractRecord> cr = Optional.empty();
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TCONTRACTS_FIND_BY_ID"))) {
+		pst.setString(1, id);
+		try (ResultSet rs = pst.executeQuery()) {
+		    if (rs.next()) {
+			cr = Optional.of(ContractRecordAssembler.toRecord(rs));
+		    }
+		}
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
+	return cr;
     }
 
     @Override
@@ -56,7 +72,7 @@ public class ContractGatewayImpl implements ContractGateway {
 		    "TCONTRACT_FIND_ACTIVE_CONTRACTS_BY_MECHANIC_ID"))) {
 		pst.setString(1, id);
 		try (ResultSet rs = pst.executeQuery()) {
-		    if (rs.next()) {
+		    while (rs.next()) {
 			list.add(ContractRecordAssembler.toRecord(rs));
 		    }
 		}
@@ -65,6 +81,31 @@ public class ContractGatewayImpl implements ContractGateway {
 	    throw new PersistenceException(e);
 	}
 	return list;
+    }
+
+    @Override
+    public List<String> findContractsByMonth(LocalDate monthDate) {
+	List<String> ids = new ArrayList<>();
+	LocalDate firstDay = monthDate.withDayOfMonth(1);
+	LocalDate lastDay = monthDate.withDayOfMonth(monthDate.lengthOfMonth());
+
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TCONTRACTS_FIND_BY_MONTH"))) {
+		pst.setDate(1, Date.valueOf(lastDay));
+		pst.setDate(2, Date.valueOf(firstDay));
+		try (ResultSet rs = pst.executeQuery()) {
+		    while (rs.next()) {
+			ids.add(rs.getString("id"));
+		    }
+		}
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
+
+	return ids;
     }
 
 }

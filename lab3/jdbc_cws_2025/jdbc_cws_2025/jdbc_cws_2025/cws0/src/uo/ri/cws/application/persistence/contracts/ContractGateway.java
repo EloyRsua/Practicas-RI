@@ -1,5 +1,6 @@
 package uo.ri.cws.application.persistence.contracts;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface ContractGateway extends Gateway<ContractRecord> {
 	public String professionalGroup_id;
 
     }
+
+    public List<String> findContractsByMonth(LocalDate previousMonth);
 }
