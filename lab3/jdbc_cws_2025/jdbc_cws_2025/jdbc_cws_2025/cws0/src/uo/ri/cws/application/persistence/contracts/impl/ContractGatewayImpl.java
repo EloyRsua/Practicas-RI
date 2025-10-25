@@ -108,4 +108,44 @@ public class ContractGatewayImpl implements ContractGateway {
 	return ids;
     }
 
+    @Override
+    public List<String> findByProfesionalGroup(String id) {
+	List<String> list = new ArrayList<>();
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TCONTRACTS_BY_PROFESSIONALGROUP"))) {
+		pst.setString(1, id);
+		try (ResultSet rs = pst.executeQuery()) {
+		    while (rs.next()) {
+			list.add(rs.getString("id"));
+		    }
+		}
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
+
+	return list;
+    }
+
+    @Override
+    public List<ContractRecord> findContractsInForce() {
+	List<ContractRecord> list = new ArrayList<ContractGateway.ContractRecord>();
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TCONTRACT_FIND_ACTIVE_CONTRACTS"))) {
+		try (ResultSet rs = pst.executeQuery()) {
+		    while (rs.next()) {
+			list.add(ContractRecordAssembler.toRecord(rs));
+		    }
+		}
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
+	return list;
+    }
+
 }

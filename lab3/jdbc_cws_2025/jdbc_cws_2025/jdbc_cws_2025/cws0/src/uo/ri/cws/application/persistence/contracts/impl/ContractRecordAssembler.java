@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import uo.ri.cws.application.persistence.contracts.ContractGateway.ContractRecord;
+import uo.ri.cws.application.service.contract.ContractCrudService.ContractDto;
 
 public class ContractRecordAssembler {
 
@@ -48,5 +49,37 @@ public class ContractRecordAssembler {
 	c.professionalGroup_id = rs.getString("professionalGroup_id");
 
 	return c;
+    }
+
+    public static ContractDto toDto(ContractRecord record) {
+	if (record == null) {
+	    return null;
+	}
+
+	ContractDto dto = new ContractDto();
+
+	// Campos comunes
+	dto.id = record.id;
+	dto.version = record.version;
+
+	// Campos propios del contrato
+	dto.startDate = (record.startDate != null)
+	    ? record.startDate.toLocalDate()
+	    : null;
+
+	dto.endDate = (record.endDate != null) ? record.endDate.toLocalDate()
+	    : null;
+
+	dto.annualBaseSalary = record.anualBaseSalary;
+	dto.taxRate = record.taxRate;
+	dto.settlement = record.settlement;
+	dto.state = record.state;
+
+	// Relaciones (ids solamente, ya que son DTOs anidados simples)
+	dto.contractType.id = record.contractType_id;
+	dto.professionalGroup.id = record.professionalGroup_id;
+	dto.mechanic.id = record.mechanic_id;
+
+	return dto;
     }
 }

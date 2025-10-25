@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,20 +18,59 @@ public class ProfessionalGroupGatewayImpl implements ProfessionalGroupGateway {
 
     @Override
     public void add(ProfessionalGroupRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TPROFESSIONALGROUPS_CREATE"))) {
+		pst.setString(1, t.id);
+		pst.setString(2, t.name);
+		pst.setDouble(3, t.productivityRate);
+		pst.setDouble(4, t.trienniumPayment);
+		pst.setLong(5, t.version);
+		pst.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+		pst.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+		pst.setString(8, "ENABLED");
 
+		pst.executeUpdate();
+
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
     }
 
     @Override
     public void remove(String id) throws PersistenceException {
-	// TODO Auto-generated method stub
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TPROFESSIONALGROUPS_REMOVE"))) {
+		pst.setString(1, id);
+		pst.executeUpdate();
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
 
     }
 
     @Override
     public void update(ProfessionalGroupRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
+	Timestamp now = new Timestamp(System.currentTimeMillis());
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TPROFESSIONALGROUP_UPDATE"))) {
+		pst.setDouble(1, t.trienniumPayment);
+		pst.setDouble(2, t.productivityRate);
+		pst.setTimestamp(3, now);
+		pst.setString(4, t.name);
 
+		pst.executeUpdate();
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
     }
 
     @Override
@@ -58,8 +99,24 @@ public class ProfessionalGroupGatewayImpl implements ProfessionalGroupGateway {
 
     @Override
     public List<ProfessionalGroupRecord> findAll() throws PersistenceException {
-	// TODO Auto-generated method stub
-	return null;
+	List<ProfessionalGroupRecord> lp = new ArrayList<>();
+
+	try {
+	    Connection c = Jdbc.getCurrentConnection();
+	    try (PreparedStatement pst = c.prepareStatement(
+		Queries.getSQLSentence("TPROFESSIONALGROUPS_FINDALL"))) {
+		try (ResultSet rs = pst.executeQuery()) {
+		    while (rs.next()) {
+			ProfessionalGroupRecord p = ProfessionalGroupRecordAssembler.toRecord(
+			    rs);
+			lp.add(p);
+		    }
+		}
+	    }
+	} catch (SQLException e) {
+	    throw new PersistenceException(e);
+	}
+	return lp;
     }
 
     @Override

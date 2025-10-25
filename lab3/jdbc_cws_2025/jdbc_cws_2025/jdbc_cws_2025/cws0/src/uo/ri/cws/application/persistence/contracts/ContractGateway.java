@@ -16,6 +16,7 @@ public interface ContractGateway extends Gateway<ContractRecord> {
 	public double anualBaseSalary;
 	public double settlement;
 	public LocalDateTime startDate;
+	public LocalDateTime endDate;
 	public String state;
 	public double taxRate;
 	public String contractType_id;
@@ -25,4 +26,8 @@ public interface ContractGateway extends Gateway<ContractRecord> {
     }
 
     public List<String> findContractsByMonth(LocalDate previousMonth);
+
+    public List<String> findByProfesionalGroup(String id);
+
+    public List<ContractRecord> findContractsInForce();
 }

@@ -16,4 +16,5 @@ public interface ProfessionalGroupGateway
 	public double productivityRate;
 	public double trienniumPayment;
     }
+
 }
