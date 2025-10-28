@@ -1,32 +1,62 @@
 package uo.ri.cws.domain;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public abstract class PaymentMean {
-	// natural attributes
-	private double accumulated = 0.0;
+    // natural attributes
+    private double accumulated = 0.0;
 
-	// accidental attributes
-	private Client client;
-	private Set<Charge> charges = new HashSet<>();
+    // accidental attributes
+    private Client client;
+    private Set<Charge> charges = new HashSet<>();
 
-	public abstract boolean canPay(Double amount);
+    public abstract boolean canPay(Double amount);
 
-	public void pay(double importe) {
-		this.accumulated += importe;
+    public void pay(double importe) {
+	this.accumulated += importe;
+    }
+
+    public Client getClient() {
+	return client;
+    }
+
+    void _setClient(Client client) {
+	this.client = client;
+    }
+
+    public Set<Charge> getCharges() {
+	return new HashSet<>(charges);
+    }
+
+    Set<Charge> _getCharges() {
+	return charges;
+    }
+
+    /// solo para cash
+    @Override
+    public int hashCode() {
+	return Objects.hash(client);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj) {
+	    return true;
 	}
-
-	void _setClient(Client client) {
-		this.client = client;
+	if (obj == null) {
+	    return false;
 	}
-
-	public Set<Charge> getCharges() {
-		return new HashSet<>( charges );
+	if (getClass() != obj.getClass()) {
+	    return false;
 	}
+	PaymentMean other = (PaymentMean) obj;
+	return Objects.equals(client, other.client);
+    }
 
-	Set<Charge> _getCharges() {
-		return charges;
-	}
+    public double getAccumulated() {
+	return accumulated;
+    }
 
 }
