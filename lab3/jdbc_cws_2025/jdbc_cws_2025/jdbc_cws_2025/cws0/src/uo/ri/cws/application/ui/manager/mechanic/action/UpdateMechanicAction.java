@@ -1,5 +1,7 @@
 package uo.ri.cws.application.ui.manager.mechanic.action;
 
+import java.util.Optional;
+
 import uo.ri.conf.Factories;
 import uo.ri.cws.application.service.mechanic.MechanicCrudService;
 import uo.ri.cws.application.service.mechanic.MechanicCrudService.MechanicDto;
@@ -18,6 +20,9 @@ public class UpdateMechanicAction implements Action {
 	dto.surname = Console.readString("Surname");
 
 	MechanicCrudService mcs = Factories.service.forMechanicCrudService();
+	Optional<MechanicDto> r = mcs.findById(dto.id);
+	dto.nif = r.get().nif;
+	dto.version = r.get().version;
 	mcs.update(dto);
 	Console.println("\nMechanic updated successfully\n");
     }

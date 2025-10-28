@@ -8,6 +8,14 @@ import uo.ri.cws.application.persistence.invoice.InvoiceGateway.InvoiceRecord;
 
 public interface InvoiceGateway extends Gateway<InvoiceRecord> {
 
+    /**
+     * getLastNumber: Obtiene el último número de factura registrado en la base
+     * de datos y devuelve el siguiente disponible.
+     *
+     * @return long - Número de factura siguiente disponible.
+     *
+     *         Ejemplo de uso: long nextNumber = invoiceGateway.getLastNumber();
+     */
     public long getLastNumber();
 
     public class InvoiceRecord extends Record {

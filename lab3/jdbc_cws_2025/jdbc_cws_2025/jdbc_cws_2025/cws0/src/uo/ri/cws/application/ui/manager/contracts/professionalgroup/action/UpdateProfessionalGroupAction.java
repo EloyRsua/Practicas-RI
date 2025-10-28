@@ -1,5 +1,7 @@
 package uo.ri.cws.application.ui.manager.contracts.professionalgroup.action;
 
+import java.util.Optional;
+
 import uo.ri.conf.Factories;
 import uo.ri.cws.application.service.professionalgroup.ProfessionalGroupCrudService;
 import uo.ri.cws.application.service.professionalgroup.ProfessionalGroupCrudService.ProfessionalGroupDto;
@@ -24,6 +26,8 @@ public class UpdateProfessionalGroupAction implements Action {
 	dto.trienniumPayment = trienniumPayment;
 	dto.productivityRate = productivityRate;
 
+	Optional<ProfessionalGroupDto> r = ps.findByName(name);
+	dto.version = r.get().version;
 	ps.update(dto);
 	Console.println("Professional group updated");
     }

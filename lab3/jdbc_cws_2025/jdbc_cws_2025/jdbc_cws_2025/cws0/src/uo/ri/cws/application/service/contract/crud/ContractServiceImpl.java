@@ -13,38 +13,38 @@ public class ContractServiceImpl implements ContractCrudService {
 
     @Override
     public ContractDto create(ContractDto c) throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return null;
     }
 
     @Override
     public void update(ContractDto dto) throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 
     }
 
     @Override
     public void delete(String id) throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 
     }
 
     @Override
     public void terminate(String contractId) throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 
     }
 
     @Override
     public Optional<ContractDto> findById(String id) throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return Optional.empty();
     }
 
     @Override
     public List<ContractSummaryDto> findByMechanicNif(String nif)
 	throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return null;
     }
 
@@ -55,7 +55,7 @@ public class ContractServiceImpl implements ContractCrudService {
 
     @Override
     public List<ContractSummaryDto> findAll() throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return null;
     }
 

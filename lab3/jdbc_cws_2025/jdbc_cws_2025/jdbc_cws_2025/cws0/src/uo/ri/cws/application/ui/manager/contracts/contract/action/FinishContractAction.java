@@ -8,9 +8,9 @@ public class FinishContractAction implements Action {
 
     @Override
     public void execute() throws BusinessException {
-        String id = Console.readString("Contract Id");
+	Console.readString("Contract Id");
 
-        throw new UnsupportedOperationException("Not yet implemented");
+	throw new UnsupportedOperationException("Not yet implemented");
 
 //		Console.println("The contract has been terminated");
     }

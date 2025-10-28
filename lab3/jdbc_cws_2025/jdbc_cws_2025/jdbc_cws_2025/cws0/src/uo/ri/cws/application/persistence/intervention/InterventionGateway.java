@@ -8,6 +8,18 @@ import uo.ri.cws.application.persistence.Record;
 import uo.ri.cws.application.persistence.intervention.InterventionGateway.InterventionRecord;
 
 public interface InterventionGateway extends Gateway<InterventionRecord> {
+
+    /**
+     * findInterventionsByMechanicId: Obtiene todas las intervenciones
+     * realizadas por un mecánico específico.
+     *
+     * @param id String - Identificador del mecánico.
+     * @return List<InterventionRecord> - Lista de intervenciones asociadas al
+     *         mecánico.
+     *
+     *         Ejemplo de uso: List<InterventionRecord> interventions =
+     *         interventionGateway.findInterventionsByMechanicId("M001");
+     */
     public List<InterventionRecord> findInterventionsByMechanicId(String id);
 
     public static class InterventionRecord extends Record {

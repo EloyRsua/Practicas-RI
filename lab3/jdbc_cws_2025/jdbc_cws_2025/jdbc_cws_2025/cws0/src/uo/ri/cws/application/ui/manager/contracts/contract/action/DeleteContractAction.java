@@ -9,9 +9,9 @@ public class DeleteContractAction implements Action {
     @Override
     public void execute() throws BusinessException {
 
-        String id = Console.readString("Contract id");
+	Console.readString("Contract id");
 
-        throw new UnsupportedOperationException("Not yet implemented");
+	throw new UnsupportedOperationException("Not yet implemented");
 
 //		Console.println("The contract has been deleted");
     }

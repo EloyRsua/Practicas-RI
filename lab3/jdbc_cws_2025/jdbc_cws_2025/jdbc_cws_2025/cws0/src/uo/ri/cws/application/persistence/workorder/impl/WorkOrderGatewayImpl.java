@@ -19,18 +19,17 @@ import uo.ri.util.jdbc.Queries;
 
 public class WorkOrderGatewayImpl implements WorkOrderGateway {
 
-    @Override
-    public void add(WorkOrderRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void remove(String id) throws PersistenceException {
-	// TODO Auto-generated method stub
-
-    }
-
+    /**
+     * update: Marca una orden de trabajo como facturada y actualiza su versión.
+     *
+     * @param t WorkOrderRecord - Objeto con los datos de la orden de trabajo a
+     *          actualizar.
+     * @throws PersistenceException - Si ocurre un error durante la
+     *                              actualización.
+     *
+     *                              Ejemplo de uso: workOrder.invoice_id =
+     *                              "I001"; workOrderGateway.update(workOrder);
+     */
     @Override
     public void update(WorkOrderRecord t) throws PersistenceException {
 	Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -49,6 +48,17 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 	}
     }
 
+    /**
+     * findById: Recupera una orden de trabajo a partir de su identificador
+     * único.
+     *
+     * @param id String - Identificador de la orden de trabajo.
+     * @return Optional<WorkOrderRecord> - Contiene la orden si existe, o vacío
+     *         si no se encuentra.
+     *
+     *         Ejemplo de uso: Optional<WorkOrderRecord> wo =
+     *         workOrderGateway.findById("WO001");
+     */
     @Override
     public Optional<WorkOrderRecord> findById(String id)
 	throws PersistenceException {
@@ -73,15 +83,19 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 	return om;
     }
 
-    @Override
-    public List<WorkOrderRecord> findAll() throws PersistenceException {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
+    /**
+     * findActiveWorkOrderByMechanicId: Obtiene las órdenes de trabajo activas
+     * (ASIGNADAS o ABIERTAS) asignadas a un mecánico específico.
+     *
+     * @param id String - Identificador del mecánico.
+     * @return List<WorkOrderRecord> - Lista de órdenes de trabajo activas.
+     *
+     *         Ejemplo de uso: List<WorkOrderRecord> activeWOs =
+     *         workOrderGateway.findActiveWorkOrderByMechanicId("M001");
+     */
     @Override
     public List<WorkOrderRecord> findActiveWorkOrderByMechanicId(String id) {
-	List<WorkOrderRecord> listOfWorkorders = new ArrayList<WorkOrderRecord>();
+	List<WorkOrderRecord> listOfWorkorders = new ArrayList<>();
 	try {
 	    Connection c = Jdbc.getCurrentConnection();
 	    try (PreparedStatement pst = c.prepareStatement(
@@ -102,12 +116,21 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 	return listOfWorkorders;
     }
 
+    /**
+     * findNotInvoicedWorkOrders: Obtiene las órdenes de trabajo finalizadas que
+     * aún no han sido facturadas para un cliente identificado por su NIF.
+     *
+     * @param nif String - NIF del cliente.
+     * @return List<WorkOrderRecord> - Lista de órdenes de trabajo no
+     *         facturadas.
+     *
+     *         Ejemplo de uso: List<WorkOrderRecord> pendingWOs =
+     *         workOrderGateway.findNotInvoicedWorkOrders("12345678A");
+     */
     @Override
     public List<WorkOrderRecord> findNotInvoicedWorkOrders(String nif) {
 	List<WorkOrderRecord> result = new ArrayList<>();
-	try
-
-	{
+	try {
 	    Connection c = Jdbc.getCurrentConnection();
 	    try (PreparedStatement pst = c.prepareStatement(
 		Queries.getSQLSentence("TWORKORDERS_FIND_NOT_INVOICED"))) {
@@ -128,6 +151,18 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 	return result;
     }
 
+    /**
+     * findTotalForMechanicInMonth: Calcula la suma total de importes de las
+     * órdenes de trabajo facturadas por un mecánico en un mes específico.
+     *
+     * @param mechanic_id String - Identificador del mecánico.
+     * @param date        LocalDate - Fecha de referencia para el mes.
+     * @return double - Total de importes facturados en ese mes.
+     *
+     *         Ejemplo de uso: double total =
+     *         workOrderGateway.findTotalForMechanicInMonth("M001",
+     *         LocalDate.of(2024, 5, 1));
+     */
     @Override
     public double findTotalForMechanicInMonth(String mechanic_id,
 	LocalDate date) {
@@ -154,6 +189,24 @@ public class WorkOrderGatewayImpl implements WorkOrderGateway {
 	}
 
 	return total;
+    }
+
+    @Override
+    public void add(WorkOrderRecord t) throws PersistenceException {
+	// No asignado
+
+    }
+
+    @Override
+    public void remove(String id) throws PersistenceException {
+	// No asignado
+
+    }
+
+    @Override
+    public List<WorkOrderRecord> findAll() throws PersistenceException {
+	// No asignado
+	return null;
     }
 
 }

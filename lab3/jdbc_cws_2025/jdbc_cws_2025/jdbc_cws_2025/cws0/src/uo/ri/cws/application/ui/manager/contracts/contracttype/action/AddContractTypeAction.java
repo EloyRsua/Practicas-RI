@@ -8,12 +8,12 @@ public class AddContractTypeAction implements Action {
 
     @Override
     public void execute() throws BusinessException {
-        String name = Console.readString("Contract type name");
-        double compensationDays = Console.readDouble("Compensation days");
+	Console.readString("Contract type name");
+	Console.readDouble("Compensation days");
 
-        throw new UnsupportedOperationException("Not yet implemented");
+	throw new UnsupportedOperationException("Not yet implemented");
 
-        // Console.println("Contract type registered");
+	// Console.println("Contract type registered");
     }
 
 }

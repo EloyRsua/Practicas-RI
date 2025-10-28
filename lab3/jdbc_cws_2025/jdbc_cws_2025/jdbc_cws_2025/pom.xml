@@ -13,7 +13,7 @@
 		<module>jdbc_cws_service_interfaces</module>
 		<module>cws0</module>
 		<module>cws_contracts_payrolls_acceptance_tests</module>
-
+		<module>cws_acceptance_tests</module>
 	</modules>
 
 	<properties>

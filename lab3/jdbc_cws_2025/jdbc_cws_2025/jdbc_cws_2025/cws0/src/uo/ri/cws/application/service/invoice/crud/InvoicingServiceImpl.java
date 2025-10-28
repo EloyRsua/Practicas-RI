@@ -20,7 +20,7 @@ public class InvoicingServiceImpl implements InvoicingService {
     @Override
     public List<InvoicingWorkOrderDto> findWorkOrdersByClientNif(String nif)
 	throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return null;
     }
 
@@ -33,28 +33,28 @@ public class InvoicingServiceImpl implements InvoicingService {
     @Override
     public List<InvoicingWorkOrderDto> findWorkOrdersByPlateNumber(String plate)
 	throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return null;
     }
 
     @Override
     public Optional<InvoiceDto> findInvoiceByNumber(Long number)
 	throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return Optional.empty();
     }
 
     @Override
     public List<PaymentMeanDto> findPayMeansByClientNif(String nif)
 	throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return null;
     }
 
     @Override
     public void settleInvoice(String invoiceId, Map<String, Double> charges)
 	throws BusinessException {
-	// TODO Auto-generated method stub
+	// No asignado
 
     }
 

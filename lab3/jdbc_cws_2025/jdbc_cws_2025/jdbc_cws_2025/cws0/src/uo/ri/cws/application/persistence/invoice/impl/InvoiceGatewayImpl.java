@@ -42,26 +42,26 @@ public class InvoiceGatewayImpl implements InvoiceGateway {
 
     @Override
     public void remove(String id) throws PersistenceException {
-	// TODO Auto-generated method stub
+	// No asignado
 
     }
 
     @Override
     public void update(InvoiceRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
+	// No asignado
 
     }
 
     @Override
     public Optional<InvoiceRecord> findById(String id)
 	throws PersistenceException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return Optional.empty();
     }
 
     @Override
     public List<InvoiceRecord> findAll() throws PersistenceException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return null;
     }
 

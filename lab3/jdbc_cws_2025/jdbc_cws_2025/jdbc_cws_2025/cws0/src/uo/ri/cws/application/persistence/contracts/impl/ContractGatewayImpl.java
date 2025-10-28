@@ -19,20 +19,17 @@ public class ContractGatewayImpl implements ContractGateway {
 
     @Override
     public void add(ContractRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
-
+	// No asignado
     }
 
     @Override
     public void remove(String id) throws PersistenceException {
-	// TODO Auto-generated method stub
-
+	// No asignado
     }
 
     @Override
     public void update(ContractRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
-
+	// No asignado
     }
 
     @Override
@@ -58,7 +55,7 @@ public class ContractGatewayImpl implements ContractGateway {
 
     @Override
     public List<ContractRecord> findAll() throws PersistenceException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return null;
     }
 

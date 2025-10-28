@@ -38,32 +38,32 @@ public class InterventionGatewayImpl implements InterventionGateway {
 
     @Override
     public void add(InterventionRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
+	// No asignado
 
     }
 
     @Override
     public void remove(String id) throws PersistenceException {
-	// TODO Auto-generated method stub
+	// No asignado
 
     }
 
     @Override
     public void update(InterventionRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
+	// No asignado
 
     }
 
     @Override
     public Optional<InterventionRecord> findById(String id)
 	throws PersistenceException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return Optional.empty();
     }
 
     @Override
     public List<InterventionRecord> findAll() throws PersistenceException {
-	// TODO Auto-generated method stub
+	// No asignado
 	return null;
     }
 

@@ -65,7 +65,7 @@ public class PayrollGatewayImpl implements PayrollGateway {
 
     @Override
     public void update(PayrollRecord t) throws PersistenceException {
-	// TODO Auto-generated method stub
+	// No asignado
 
     }
 

@@ -8,10 +8,10 @@ public class UpdateContractTypeAction implements Action {
 
     @Override
     public void execute() throws BusinessException {
-        String name = Console.readString("Contract type name");
+	Console.readString("Contract type name");
 
-        // Check contract type exists
-        throw new UnsupportedOperationException("Not yet implemented");
+	// Check contract type exists
+	throw new UnsupportedOperationException("Not yet implemented");
 
 //		double compensationDays = Console.readDouble("Compensation days");
 //

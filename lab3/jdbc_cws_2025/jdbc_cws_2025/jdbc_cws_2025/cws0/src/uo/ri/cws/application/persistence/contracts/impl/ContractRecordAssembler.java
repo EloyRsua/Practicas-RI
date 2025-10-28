@@ -31,10 +31,6 @@ public class ContractRecordAssembler {
 	c.settlement = rs.getDouble("settlement");
 
 	var startDate = rs.getDate("startDate");
-	var endDate = rs.getDate("endDate"); // No está en ContractRecord, pero
-					     // si lo agregas en el futuro
-	// puedes mapearlo aquí también
-
 	// Convertimos de java.sql.Date a LocalDateTime (manteniendo coherencia
 	// con otros registros)
 	c.startDate = (startDate != null) ? startDate.toLocalDate()
