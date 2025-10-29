@@ -11,7 +11,7 @@
 	<modules>
 		<module>cws_util</module>
 		<module>jdbc_cws_service_interfaces</module>
-		<module>cws0</module>
+		<module>jdbc_cws_UO298184</module>
 		<module>cws_contracts_payrolls_acceptance_tests</module>
 		<module>cws_acceptance_tests</module>
 	</modules>
