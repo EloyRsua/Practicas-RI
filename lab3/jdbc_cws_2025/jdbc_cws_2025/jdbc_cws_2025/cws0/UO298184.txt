@@ -1,0 +1,7 @@
+Eloy Rubio Suárez 71790769H
+
+– Gestion de nominas
+– Gestion de tipos de grupos profesionales
+– Gestion de mecanicos ampliado
+
+Implementado todo, todos los test relacionados pasan.

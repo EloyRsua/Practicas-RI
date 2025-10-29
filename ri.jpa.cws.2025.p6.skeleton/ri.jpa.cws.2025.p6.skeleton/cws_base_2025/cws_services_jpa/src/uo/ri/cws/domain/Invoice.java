@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import uo.ri.util.assertion.ArgumentChecks;
@@ -168,6 +169,32 @@ public class Invoice {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(number);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Invoice other = (Invoice) obj;
+		return Objects.equals(number, other.number);
+	}
+
+	@Override
+	public String toString() {
+		return "Invoice [number=" + number + ", date=" + date + ", amount="
+			+ amount + ", vat=" + vat + ", state=" + state + "]";
 	}
 
 }
