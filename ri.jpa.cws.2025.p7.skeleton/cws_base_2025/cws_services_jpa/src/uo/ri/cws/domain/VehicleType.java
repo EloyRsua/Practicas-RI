@@ -11,45 +11,50 @@ import uo.ri.util.assertion.ArgumentChecks;
 
 @Entity
 public class VehicleType extends BaseEntity {
-    // natural attributes
-    @Column(unique = true)
-    private String name;
-    private double pricePerHour;
+	// natural attributes
+	@Column(unique = true)
+	private String name;
+	private double pricePerHour;
 
-    // accidental attributes
-    @OneToMany(mappedBy = "vehicle")
-    private Set<Vehicle> vehicles = new HashSet<>();
+	// accidental attributes
+	@OneToMany(mappedBy = "vehicle")
+	private Set<Vehicle> vehicles = new HashSet<>();
 
-    VehicleType() {
-    }
+	VehicleType() {
+	}
 
-    public VehicleType(String name, double pricePerHour) {
-	ArgumentChecks.isNotBlank(name);
-	ArgumentChecks.isNotNull(pricePerHour);
-	ArgumentChecks.isTrue(pricePerHour >= 0);
-	this.name = name;
-	this.pricePerHour = pricePerHour;
-    }
+	public VehicleType(String name, double pricePerHour) {
+		ArgumentChecks.isNotBlank(name);
+		ArgumentChecks.isNotNull(pricePerHour);
+		ArgumentChecks.isTrue(pricePerHour >= 0);
+		this.name = name;
+		this.pricePerHour = pricePerHour;
+	}
 
-    public Set<Vehicle> getVehicles() {
-	return new HashSet<>(vehicles);
-    }
+	public VehicleType(String name) {
+		this(name, 1.0);
+	}
 
-    /* BACKDOOR */Set<Vehicle> _getVehicles() {
-	return vehicles;
-    }
+	public Set<Vehicle> getVehicles() {
+		return new HashSet<>(vehicles);
+	}
 
-    public String getName() {
-	return name;
-    }
+	/* BACKDOOR */Set<Vehicle> _getVehicles() {
+		return vehicles;
+	}
 
-    public double getPricePerHour() {
-	return pricePerHour;
-    }
+	public String getName() {
+		return name;
+	}
 
-    @Override
-    public String toString() {
-	return "VehicleType [name=" + name + ", pricePerHour=" + pricePerHour + "]";
-    }
+	public double getPricePerHour() {
+		return pricePerHour;
+	}
+
+	@Override
+	public String toString() {
+		return "VehicleType [name=" + name + ", pricePerHour=" + pricePerHour
+			+ "]";
+	}
 
 }

@@ -13,71 +13,76 @@ import uo.ri.util.assertion.ArgumentChecks;
 
 @Entity
 public class Vehicle extends BaseEntity {
-    @Column(unique = true)
-    private String plateNumber;
-    @Basic(optional = false)
-    private String make;
-    @Basic(optional = false)
-    private String model;
+	@Column(unique = true)
+	private String plateNumber;
+	@Basic(optional = false)
+	private String make;
+	@Basic(optional = false)
+	private String model;
 
-    @ManyToOne
-    private Client client;
-    @ManyToOne
-    private VehicleType vehicle;
-    @OneToMany(mappedBy = "vehicle")
-    private Set<WorkOrder> workOrders = new HashSet<WorkOrder>();
+	@ManyToOne
+	private Client client;
+	@ManyToOne
+	private VehicleType vehicle;
+	@OneToMany(mappedBy = "vehicle")
+	private Set<WorkOrder> workOrders = new HashSet<WorkOrder>();
 
-    Vehicle() {
-    }
+	Vehicle() {
+	}
 
-    public Vehicle(String plateNumber, String make, String model) {
-	ArgumentChecks.isNotBlank(plateNumber);
-	ArgumentChecks.isNotBlank(make);
-	ArgumentChecks.isNotBlank(model);
-	this.plateNumber = plateNumber;
-	this.make = make;
-	this.model = model;
-    }
+	public Vehicle(String plateNumber, String make, String model) {
+		ArgumentChecks.isNotBlank(plateNumber);
+		ArgumentChecks.isNotBlank(make);
+		ArgumentChecks.isNotBlank(model);
+		this.plateNumber = plateNumber;
+		this.make = make;
+		this.model = model;
+	}
 
-    public String getPlateNumber() {
-	return plateNumber;
-    }
+	public Vehicle(String plateNumber) {
+		this(plateNumber, "no-make", "no-model");
+	}
 
-    public String getMake() {
-	return make;
-    }
+	public String getPlateNumber() {
+		return plateNumber;
+	}
 
-    public String getModel() {
-	return model;
-    }
+	public String getMake() {
+		return make;
+	}
 
-    public Client getClient() {
-	return client;
-    }
+	public String getModel() {
+		return model;
+	}
 
-    /* BACKDOOR */void _setClient(Client client) {
-	this.client = client;
-    }
+	public Client getClient() {
+		return client;
+	}
 
-    public VehicleType getVehicleType() {
-	return vehicle;
-    }
+	/* BACKDOOR */void _setClient(Client client) {
+		this.client = client;
+	}
 
-    /* BACKDOOR */void _setVehicleType(VehicleType vehicle) {
-	this.vehicle = vehicle;
-    }
+	public VehicleType getVehicleType() {
+		return vehicle;
+	}
 
-    public Set<WorkOrder> getWorkOrders() {
-	return new HashSet<>(workOrders);
-    }
+	/* BACKDOOR */void _setVehicleType(VehicleType vehicle) {
+		this.vehicle = vehicle;
+	}
 
-    /* BACKDOOR */Set<WorkOrder> _getWorkOrders() {
-	return workOrders;
-    }
+	public Set<WorkOrder> getWorkOrders() {
+		return new HashSet<>(workOrders);
+	}
 
-    @Override
-    public String toString() {
-	return "Vehicle [plateNumber=" + plateNumber + ", make=" + make + ", model=" + model + "]";
-    }
+	/* BACKDOOR */Set<WorkOrder> _getWorkOrders() {
+		return workOrders;
+	}
+
+	@Override
+	public String toString() {
+		return "Vehicle [plateNumber=" + plateNumber + ", make=" + make
+			+ ", model=" + model + "]";
+	}
 
 }

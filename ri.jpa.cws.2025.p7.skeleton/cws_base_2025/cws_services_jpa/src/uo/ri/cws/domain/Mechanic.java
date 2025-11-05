@@ -11,62 +11,67 @@ import uo.ri.util.assertion.ArgumentChecks;
 
 @Entity
 public class Mechanic extends BaseEntity {
-    // natural attributes
-    @Column(unique = true)
-    private String nif;
-    private String surname;
-    private String name;
+	// natural attributes
+	@Column(unique = true)
+	private String nif;
+	private String surname;
+	private String name;
 
-    // accidental attributes
-    @OneToMany(mappedBy = "mechanic")
-    private Set<WorkOrder> assigned = new HashSet<>();
-    @OneToMany(mappedBy = "mechanic")
-    private Set<Intervention> interventions = new HashSet<>();
+	// accidental attributes
+	@OneToMany(mappedBy = "mechanic")
+	private Set<WorkOrder> assigned = new HashSet<>();
+	@OneToMany(mappedBy = "mechanic")
+	private Set<Intervention> interventions = new HashSet<>();
 
-    Mechanic() {
-    }
+	Mechanic() {
+	}
 
-    public Mechanic(String nif, String surname, String name) {
-	ArgumentChecks.isNotBlank(name);
-	ArgumentChecks.isNotBlank(surname);
-	ArgumentChecks.isNotBlank(nif);
+	public Mechanic(String nif, String surname, String name) {
+		ArgumentChecks.isNotBlank(name);
+		ArgumentChecks.isNotBlank(surname);
+		ArgumentChecks.isNotBlank(nif);
 
-	this.nif = nif;
-	this.surname = surname;
-	this.name = name;
-    }
+		this.nif = nif;
+		this.surname = surname;
+		this.name = name;
+	}
 
-    public String getNif() {
-	return nif;
-    }
+	public Mechanic(String nif) {
+		this(nif, "no_surname", "no_name");
+	}
 
-    public String getSurname() {
-	return surname;
-    }
+	public String getNif() {
+		return nif;
+	}
 
-    public String getName() {
-	return name;
-    }
+	public String getSurname() {
+		return surname;
+	}
 
-    public Set<WorkOrder> getAssigned() {
-	return new HashSet<>(assigned);
-    }
+	public String getName() {
+		return name;
+	}
 
-    Set<WorkOrder> _getAssigned() {
-	return assigned;
-    }
+	public Set<WorkOrder> getAssigned() {
+		return new HashSet<>(assigned);
+	}
 
-    public Set<Intervention> getInterventions() {
-	return new HashSet<>(interventions);
-    }
+	Set<WorkOrder> _getAssigned() {
+		return assigned;
+	}
 
-    Set<Intervention> _getInterventions() {
-	return interventions;
-    }
+	public Set<Intervention> getInterventions() {
+		return new HashSet<>(interventions);
+	}
 
-    @Override
-    public String toString() {
-	return "Mechanic [nif=" + nif + ", surname=" + surname + ", name=" + name + "]";
-    }
+	Set<Intervention> _getInterventions() {
+		return interventions;
+	}
+
+	@Override
+	public String toString() {
+		return "Mechanic [nif=" + nif + ", surname=" + surname + ", name="
+			+ name + "]";
+	}
 
 }
