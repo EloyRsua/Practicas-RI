@@ -59,4 +59,9 @@ public class ContractType extends BaseEntity {
 		return contracts;
 	}
 
+	@Override
+	public String toString() {
+		return "ContractType [name=" + name + ", compensationDaysPerYear="
+			+ compensationDaysPerYear + "]";
+	}
 }
