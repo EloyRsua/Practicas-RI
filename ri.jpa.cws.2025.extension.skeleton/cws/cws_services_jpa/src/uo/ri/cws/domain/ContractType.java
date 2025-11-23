@@ -3,7 +3,7 @@ package uo.ri.cws.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.Basic;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -14,10 +14,10 @@ import uo.ri.util.assertion.ArgumentChecks;
 @Table(name = "TContractTypes")
 public class ContractType extends BaseEntity {
 
-	@Column(unique = true)
+	@Basic(optional = false)
 	private String name;
 
-	private Double compensationDaysPerYear;
+	private double compensationDaysPerYear;
 
 	@OneToMany(mappedBy = "contractType")
 	private Set<Contract> contracts = new HashSet<>();
@@ -52,7 +52,7 @@ public class ContractType extends BaseEntity {
 	}
 
 	public Set<Contract> getContracts() {
-		return new HashSet<Contract>(contracts);
+		return new HashSet<>(contracts);
 	}
 
 	/* BACKDOOR */Set<Contract> _getContracts() {

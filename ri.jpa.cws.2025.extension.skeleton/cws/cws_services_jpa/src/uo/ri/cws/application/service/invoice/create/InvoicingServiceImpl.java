@@ -7,6 +7,7 @@ import java.util.Optional;
 import uo.ri.conf.Factories;
 import uo.ri.cws.application.service.invoice.InvoicingService;
 import uo.ri.cws.application.service.invoice.create.command.CreateInvoiceFor;
+import uo.ri.cws.application.service.invoice.create.command.FindNotInvoicedWorkordersByClientNif;
 import uo.ri.cws.application.util.command.CommandExecutor;
 import uo.ri.util.exception.BusinessException;
 import uo.ri.util.exception.NotYetImplementedException;
@@ -16,45 +17,45 @@ public class InvoicingServiceImpl implements InvoicingService {
 	private CommandExecutor executor = Factories.executor.forExecutor();
 
 	@Override
-	public InvoiceDto create(List<String> woIds)
-			throws BusinessException {
+	public InvoiceDto create(List<String> woIds) throws BusinessException {
 
-		return executor.execute( new CreateInvoiceFor( woIds) );
+		return executor.execute(new CreateInvoiceFor(woIds));
 	}
 
 	@Override
 	public List<InvoicingWorkOrderDto> findWorkOrdersByClientNif(String nif)
-			throws BusinessException {
+		throws BusinessException {
 		throw new NotYetImplementedException();
 	}
 
 	@Override
 	public List<InvoicingWorkOrderDto> findNotInvoicedWorkOrdersByClientNif(
-			String nif) throws BusinessException {
-		throw new NotYetImplementedException();
+		String nif) throws BusinessException {
+		return executor.execute(new FindNotInvoicedWorkordersByClientNif(nif));
+
 	}
 
 	@Override
 	public List<InvoicingWorkOrderDto> findWorkOrdersByPlateNumber(String plate)
-			throws BusinessException {
+		throws BusinessException {
 		throw new NotYetImplementedException();
 	}
 
 	@Override
 	public Optional<InvoiceDto> findInvoiceByNumber(Long number)
-			throws BusinessException {
+		throws BusinessException {
 		throw new NotYetImplementedException();
 	}
 
 	@Override
 	public List<PaymentMeanDto> findPayMeansByClientNif(String nif)
-			throws BusinessException {
+		throws BusinessException {
 		throw new NotYetImplementedException();
 	}
 
 	@Override
 	public void settleInvoice(String invoiceId, Map<String, Double> charges)
-			throws BusinessException {
+		throws BusinessException {
 		throw new NotYetImplementedException();
 	}
 

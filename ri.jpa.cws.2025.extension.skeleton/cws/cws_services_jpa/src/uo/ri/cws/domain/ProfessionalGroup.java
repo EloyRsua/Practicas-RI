@@ -16,9 +16,9 @@ public class ProfessionalGroup extends BaseEntity {
 	@Column(unique = true)
 	private String name;
 
-	private Double trieniumPayment;
+	private double trienniumPayment;
 
-	private Double productivityRate;
+	private double productivityRate;
 
 	@OneToMany(mappedBy = "professionalGroup")
 	private Set<Contract> contracts = new HashSet<>();
@@ -37,7 +37,7 @@ public class ProfessionalGroup extends BaseEntity {
 
 		this.name = name;
 		this.productivityRate = productivityPlus;
-		this.trieniumPayment = trienniumSalary;
+		this.trienniumPayment = trienniumSalary;
 	}
 
 	public String getName() {
@@ -49,11 +49,11 @@ public class ProfessionalGroup extends BaseEntity {
 	}
 
 	public Double getTrienniumPayment() {
-		return trieniumPayment;
+		return trienniumPayment;
 	}
 
 	public void setTrieniumPayment(Double trieniumPayment) {
-		this.trieniumPayment = trieniumPayment;
+		this.trienniumPayment = trieniumPayment;
 	}
 
 	public Double getProductivityRate() {

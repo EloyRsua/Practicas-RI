@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence/orm https://jakarta.ee/xml/ns/persistence/orm/orm_3_1.xsd"
 	version="3.1">
-	
+
 	<!-- Vehicle queries -->
 	<named-query name="Vehicle.findByPlate">
 		<query>select v from Vehicle v where v.plateNumber = ?1</query>
@@ -19,9 +19,9 @@
 		<query>
 			select m
 			from Invoice f
-				join f.workOrders w
-				join w.vehicle.client c
-				join c.paymentMeans m
+			join f.workOrders w
+			join w.vehicle.client c
+			join c.paymentMeans m
 			where f.id = ?1
 		</query>
 	</named-query>
@@ -40,12 +40,91 @@
 		<query>select f from Invoice f where f.number = ?1</query>
 	</named-query>
 
+	<named-query name="WorkOrder.findNotInvoicedByClientNif">
+		<query>
+			SELECT w
+			FROM WorkOrder w
+			JOIN w.vehicle v
+			JOIN v.client c
+			WHERE c.nif = ?1
+			AND w.state = uo.ri.cws.domain.WorkOrder.WorkOrderState.FINISHED
+		</query>
+	</named-query>
+
+	<named-query name="Payroll.findByDate">
+		<query>
+      <![CDATA[
+			select p
+			from Payroll p
+			where p.date <= ?1
+				and p.date >= ?2
+			]]>
+    </query>
+	</named-query>
+	<named-query name="Contract.findAllInForceThisMonth">
+    <query>
+        <![CDATA[
+            select c
+            from Contract c
+            where c.startDate <= ?1
+              and c.state = uo.ri.cws.domain.ContractState.IN_FORCE
+        ]]>
+    </query>
+</named-query>
+
+	<named-query name="Payroll.findByEndDate">
+		<query>
+			select p
+			from Payroll p
+			where p.date = ?1
+		</query>
+	</named-query>
+	<named-query name="ProfessionalGroup.findByName">
+		<query>
+			select p
+			from ProfessionalGroup p
+			where p.name = ?1
+		</query>
+	</named-query>
+	<named-query name="Payroll.findByMechanicIdInMonth">
+		<query>
+        <![CDATA[
+            select p
+            from Payroll p
+            join p.contract c
+            where c.mechanic.id = ?3
+              and p.date >= ?1
+              and p.date <= ?2
+        ]]>
+    </query>
+	</named-query>
+	<named-query name="Payroll.findByProfessionalGroupName">
+		<query>
+			select p
+			from Payroll p
+			where p.contract.professionalGroup.name = ?1
+		</query>
+	</named-query>
+	<named-query name="Payroll.findByMechanicId">
+		<query>
+			select p
+			from Payroll p
+			where p.contract.mechanic.id = ?1
+		</query>
+	</named-query>
+	<named-query name="Contract.findInForce">
+		<query>
+			select c
+			from Contract c
+			where c.state = uo.ri.cws.domain.ContractState.IN_FORCE
+		</query>
+	</named-query>
 	<named-query name="Invoice.getNextInvoiceNumber">
 		<query>
-			select cast( coalesce(max(f.number) + 1, 1L) as bigint ) 
+			select cast( coalesce(max(f.number) + 1, 1L) as bigint )
 			from Invoice f
 		</query>
-<!-- 	
+		<!-- 	
 		This breaks if there is none invoice
 		<query>select max(f.number) + 1 from Invoice f</query>
 -->

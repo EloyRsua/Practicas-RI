@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -13,13 +14,15 @@ import uo.ri.cws.domain.base.BaseEntity;
 import uo.ri.util.assertion.ArgumentChecks;
 
 @Entity
-@Table(name = "Tmechanics")
+@Table(name = "TMechanics")
 
 public class Mechanic extends BaseEntity {
 	// natural attributes
 	@Column(unique = true)
 	private String nif;
+	@Basic(optional = false)
 	private String surname;
+	@Basic(optional = false)
 	private String name;
 
 	// accidental attributes
@@ -92,7 +95,7 @@ public class Mechanic extends BaseEntity {
 	}
 
 	public Set<Contract> getContracts() {
-		return new HashSet<Contract>(contracts);
+		return new HashSet<>(contracts);
 	}
 
 	/**

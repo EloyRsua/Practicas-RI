@@ -15,11 +15,15 @@ public interface PayrollRepository extends Repository<Payroll> {
 	Optional<Payroll> findLastPayrollByMechanicId(String mechanicId);
 
 	Optional<Payroll> findByContractIdAndDate(String id, LocalDate date);
-	
+
 	List<Payroll> findAll();
 
 	List<Payroll> findByProfessionalGroupName(String name);
 
 	List<Payroll> findByMechanicId(String id);
+
+	List<Payroll> findByMechanicIdInMonth(String mechanicId);
+
+	List<Payroll> findByDate(LocalDate lastDay);
 
 }

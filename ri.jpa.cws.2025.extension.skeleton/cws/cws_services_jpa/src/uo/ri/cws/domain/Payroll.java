@@ -22,9 +22,9 @@ public class Payroll extends BaseEntity {
 	private double trienniumEarning;
 	private double taxDeduction;
 	private double nicDeduction;
-	private double totalDeductions;
-	private double netSalary;
-	private double grossSalary;
+//	private double totalDeductions;
+//	private double netSalary;
+//	private double grossSalary;
 
 	// accidental Attributes
 	@ManyToOne
@@ -57,9 +57,6 @@ public class Payroll extends BaseEntity {
 		this.trienniumEarning = trienniumEarning;
 		this.taxDeduction = taxDeduction;
 		this.nicDeduction = nicDeduction;
-		this.totalDeductions = totalDeductions;
-		this.netSalary = netSalary;
-		this.grossSalary = grossSalary;
 
 		Associations.Generates.link(contract, this);
 	}
@@ -79,11 +76,8 @@ public class Payroll extends BaseEntity {
 		double totalDeductions = taxDeduction + nicDeduction;
 		double netSalary = grossSalary - totalDeductions;
 
-		this.grossSalary = grossSalary;
 		this.taxDeduction = taxDeduction;
 		this.nicDeduction = nicDeduction;
-		this.totalDeductions = totalDeductions;
-		this.netSalary = netSalary;
 
 	}
 
@@ -196,28 +190,19 @@ public class Payroll extends BaseEntity {
 		this.nicDeduction = nicDeduction;
 	}
 
+	// ATRIBUTOS QUE NO MAPEAMOS (CALCULADOS)
 	public double getTotalDeductions() {
-		return totalDeductions;
-	}
-
-	public void setTotalDeductions(double totalDeductions) {
-		this.totalDeductions = totalDeductions;
+		return taxDeduction + nicDeduction;
 	}
 
 	public double getNetSalary() {
-		return netSalary;
-	}
-
-	public void setNetSalary(double netSalary) {
-		this.netSalary = netSalary;
+		return (baseSalary + extraSalary + productivityEarning
+			+ trienniumEarning) - (taxDeduction + nicDeduction);
 	}
 
 	public double getGrossSalary() {
-		return grossSalary;
-	}
-
-	public void setGrossSalary(double grossSalary) {
-		this.grossSalary = grossSalary;
+		return baseSalary + extraSalary + productivityEarning
+			+ trienniumEarning;
 	}
 
 	@Override
@@ -226,8 +211,7 @@ public class Payroll extends BaseEntity {
 			+ ", extraSalary=" + extraSalary + ", productivityEarning="
 			+ productivityEarning + ", trienniumEarning=" + trienniumEarning
 			+ ", taxDeduction=" + taxDeduction + ", nicDeduction="
-			+ nicDeduction + ", totalDeductions=" + totalDeductions
-			+ ", netSalary=" + netSalary + ", grossSalary=" + grossSalary
-			+ ", contract=" + contract + "]";
+			+ nicDeduction + ", totalDeductions=" + ", contract=" + contract
+			+ "]";
 	}
 }

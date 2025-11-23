@@ -7,6 +7,8 @@ import java.util.Set;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -17,10 +19,11 @@ import uo.ri.util.assertion.StateChecks;
 
 @Entity
 @Table(name = "TContracts", uniqueConstraints = {
-	@UniqueConstraint(columnNames = { "STARTDATE", "MECHANIC_ID" }) })
+	@UniqueConstraint(columnNames = { "MECHANIC_ID", "STARTDATE" }) })
 public class Contract extends BaseEntity {
 	private LocalDate startDate;
 
+	@Basic(optional = false)
 	private LocalDate endDate = null;
 
 	@Basic(optional = false)
@@ -28,6 +31,7 @@ public class Contract extends BaseEntity {
 	private Double settlement;
 	private Double taxRate;
 
+	@Enumerated(EnumType.STRING)
 	private ContractState state;
 
 	// Atributos accidentales

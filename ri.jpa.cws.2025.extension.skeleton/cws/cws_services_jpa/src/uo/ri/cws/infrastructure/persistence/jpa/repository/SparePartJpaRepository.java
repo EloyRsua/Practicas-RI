@@ -6,27 +6,25 @@ import java.util.Optional;
 import uo.ri.cws.application.repository.SparePartRepository;
 import uo.ri.cws.domain.SparePart;
 import uo.ri.cws.infrastructure.persistence.jpa.util.BaseJpaRepository;
-import uo.ri.cws.infrastructure.persistence.jpa.util.Jpa;
 
-public class SparePartJpaRepository
-		extends BaseJpaRepository<SparePart>
-		implements SparePartRepository {
+public class SparePartJpaRepository extends BaseJpaRepository<SparePart>
+	implements SparePartRepository {
 
 	@Override
 	public Optional<SparePart> findByCode(String code) {
-		// TODO Auto-generated method stub
+		// NO ASIGNADO
 		return null;
 	}
 
 	@Override
 	public List<SparePart> findUnderStockNotPending() {
-		// TODO Auto-generated method stub
+		// NO ASIGNADO
 		return null;
 	}
 
 	@Override
 	public List<SparePart> findByDescription(String description) {
-		// TODO Auto-generated method stub
+		// NO ASIGNADO
 		return null;
 	}
 

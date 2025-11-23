@@ -27,10 +27,10 @@ public class DeleteMechanic implements Command<Void> {
 
 		Mechanic mechanic = optional.get();
 		BusinessChecks.isTrue(mechanic.getAssigned()
-			.isEmpty(), "The mechanic has workotders");
+			.isEmpty(), "The mechanic has workorders");
 		BusinessChecks.isTrue(mechanic.getInterventions()
 			.isEmpty(), "The mechanic has interventions");
-		BusinessChecks.isTrue(mechanic.getContractInForce()
+		BusinessChecks.isTrue(mechanic.getContracts()
 			.isEmpty(), "The mechanic has contract in force");
 
 		repo.remove(mechanic);

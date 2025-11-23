@@ -9,26 +9,27 @@ import uo.ri.cws.domain.ProfessionalGroup;
 
 public class DtoAssembler {
 
-
-	public static Optional<ProfessionalGroupDto> toProfessionalGroupDto(Optional<ProfessionalGroup> arg) {
+	public static Optional<ProfessionalGroupDto> toProfessionalGroupDto(
+		Optional<ProfessionalGroup> arg) {
 		ProfessionalGroupDto dto = null;
-		
+
 		if (arg.isPresent()) {
 			dto = toDto(arg.get());
 		}
 		return Optional.ofNullable(dto);
 	}
 
-	public static List<ProfessionalGroupDto> toProfessionalGroupDtoList(List<ProfessionalGroup> list) {
+	public static List<ProfessionalGroupDto> toProfessionalGroupDtoList(
+		List<ProfessionalGroup> list) {
 		List<ProfessionalGroupDto> res = new ArrayList<>();
 		for (ProfessionalGroup m : list) {
 			res.add(toDto(m));
 		}
 		return res;
 	}
-	
-	private static ProfessionalGroupDto toDto(ProfessionalGroup m) {
-		ProfessionalGroupDto 	dto = new ProfessionalGroupDto();
+
+	public static ProfessionalGroupDto toDto(ProfessionalGroup m) {
+		ProfessionalGroupDto dto = new ProfessionalGroupDto();
 		dto.id = m.getId();
 		dto.version = m.getVersion();
 
