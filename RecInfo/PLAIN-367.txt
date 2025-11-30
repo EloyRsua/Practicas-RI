@@ -1,0 +1,22 @@
+PLAIN-367	
+http://nutritionfacts.org/questions/what-is-the-best-way-to-get-b12/	
+
+What is the best way to get vitamin B12?	
+
+What would you recommend as far as the best way to get B12 vitamins into our system, supplements? 
+Will any over the counter supplement do? If one were lacto-ovo vegetarian, do they get vitamin B12 
+from cheese and eggs?	
+
+how to get vitamin B12
+
+
+QRELS
+PLAIN-367	0	MED-4556	1
+PLAIN-367	0	MED-4559	1
+PLAIN-367	0	MED-4676	1
+PLAIN-367	0	MED-4683	1
+PLAIN-367	0	MED-4747	1
+PLAIN-367	0	MED-4748	1
+PLAIN-367	0	MED-4749	1
+PLAIN-367	0	MED-4750	1
+PLAIN-367	0	MED-4751	1
